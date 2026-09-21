@@ -434,6 +434,14 @@ AppIntents, Charts y SwiftUI enlazados, UUID del dSYM coincidente. Sin warnings.
 `codesign -dvv` devolvió 1: resultado esperado que confirma falta de firma.
 No se intentó exportar ni subir ese archive sin firma.
 
+En esa primera ejecución, Xcode 16.4 aprobó 26/26. Xcode 26.2 aprobó 25 tests de
+unidad/integración y falló el único XCUITest al buscar «Cancelar»: la jerarquía real
+mostró un popover y `PopoverDismissRegion` en lugar de ese botón. Se adaptó únicamente
+el test a ambas presentaciones nativas, esperando la confirmación, cancelando por
+el control disponible y verificando que desaparece sin eliminar la fila antes de
+probar el borrado confirmado. No se cambia la UI ni se elimina una aserción de negocio.
+La primera ejecución global es **failure**, no se presenta como CI completamente verde.
+
 Comandos locales realizados:
 
 ```text

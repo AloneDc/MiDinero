@@ -46,11 +46,26 @@ final class MiDineroUITests: XCTestCase {
         let updatedRow = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "transaction.")).firstMatch
         updatedRow.swipeLeft()
         app.buttons["Eliminar"].tap()
-        app.buttons["Cancelar"].tap()
+        let confirmDelete = app.buttons["Eliminar movimiento"]
+        XCTAssertTrue(confirmDelete.waitForExistence(timeout: 5))
+        attachScreenshot(app, named: "Confirmación antes de cancelar")
+        let cancel = app.buttons["Cancelar"]
+        if cancel.exists {
+            cancel.tap()
+        } else {
+            // iOS 26 can present a popover with an outside dismissal region.
+            // Its accessibility identifier was observed in the actual CI hierarchy.
+            let dismissRegion = app.otherElements["PopoverDismissRegion"]
+            XCTAssertTrue(dismissRegion.waitForExistence(timeout: 5))
+            dismissRegion.tap()
+        }
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: confirmDelete)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
         XCTAssertTrue(updatedRow.exists)
         updatedRow.swipeLeft()
         app.buttons["Eliminar"].tap()
-        app.buttons["Eliminar movimiento"].tap()
+        XCTAssertTrue(confirmDelete.waitForExistence(timeout: 5))
+        confirmDelete.tap()
         XCTAssertTrue(app.staticTexts["Tu historial empieza aquí"].waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
