@@ -25,7 +25,9 @@ final class CSVExporterTests: XCTestCase {
     }
 
     func testEmptyExportStillHasHeader() throws {
-        let csv = try XCTUnwrap(String(data: CSVExporter().export([]), encoding: .utf8))
-        XCTAssertEqual(csv, "\u{FEFF}id,type,amount,currency,category_id,category,note,date,created_at\r\n")
+        // Foundation's UTF-8 decoder consumes the BOM on Apple platforms.
+        // Verify the actual exported bytes, including BOM and CRLF.
+        let data = try CSVExporter().export([])
+        XCTAssertEqual(data, Data("\u{FEFF}id,type,amount,currency,category_id,category,note,date,created_at\r\n".utf8))
     }
 }

@@ -25,17 +25,34 @@ xcode-select -p
 xcodebuild -version
 xcrun swift --version
 open MiDinero.xcodeproj
-xcrun simctl list devices available
-SIMULATOR_ID=<UUID_DE_UN_IPHONE> bash scripts/validate_mac.sh
+bash scripts/validate_mac.sh
+# Selecci?n opcional: SIMULATOR_ID=<UUID> bash scripts/validate_mac.sh
 ```
 
-Instala un runtime iOS compatible en Xcode si la lista está vacía. El script ejecuta:
+Necesita Xcode 16+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
+El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`:
 
-1. Verificación estructural y las 17 pruebas del núcleo con `swift test`.
-2. Listado real de targets/schemes con `xcodebuild -list`.
-3. Compilación Debug para el Simulator elegido.
-4. XCTest (23 unitarias/integración) y XCUITest (1), con resultado `.xcresult`.
-5. Compilación Release para Simulator.
+1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisi?n y targets/schemes.
+2. Detecta dispositivos con `simctl` y destinos con `xcodebuild -showdestinations`.
+   Si el runner inicialmente solo anuncia destinos gen?ricos, elige un iPhone
+   instalado del SDK detectado, lo arranca y Xcode resuelve su UUID expl?cito.
+3. Compila Debug y `build-for-testing`, sin signing para Simulator.
+4. Enumera con `test-without-building -enumerate-tests`, ejecuta todas las pruebas
+   con `test-without-building` y lee resultados reales mediante `xcresulttool`.
+   El inventario esperado es 25 pruebas unitarias/integraci?n y 1 de UI. No se
+   acepta un resultado verde con pruebas ausentes, omitidas o no ejecutadas.
+5. Compila Release para Simulator y conserva todos los diagn?sticos.
+
+Los artefactos `xcode-evidence-<run>-<attempt>` conservan durante 14 d?as logs,
+comandos y c?digos de salida en `result.json`, inventario descubierto, res?menes
+JSON y bundles `.xcresult`. El directorio local `build/ci-evidence/` no se
+sobrescribe: mu?velo antes de repetir. Las cinco pruebas Python del parser de
+CI son complementarias; no se suman al conteo de XCTest/XCUITest.
+
+`swift test` ejecuta por separado las 17 pruebas Foundation. No sustituye los
+25 tests del target alojado en la app ni XCUITest. El scheme compartido inyecta
+`MIDINERO_UI_TEST_STORE` ?nicamente para tests; Launch normal no lo hereda.
+La prueba UI usa un UUID nuevo y lo conserva para su reapertura.
 
 Revisar warnings de concurrencia con `SWIFT_STRICT_CONCURRENCY=complete`, expansión
 de SwiftData y extracción de metadata App Intents. Corregir cualquier fallo y repetir

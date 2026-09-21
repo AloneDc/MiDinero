@@ -73,6 +73,7 @@ def generate() -> dict[str, str]:
                 "PRODUCT_BUNDLE_IDENTIFIER": "com.eduardo.MiDinero" + ("" if is_app else "." + name),
                 "TARGETED_DEVICE_FAMILY": "1", "SWIFT_VERSION": "5.0",
                 "SWIFT_STRICT_CONCURRENCY": "complete", "IPHONEOS_DEPLOYMENT_TARGET": "17.0",
+                "OTHER_SWIFT_FLAGS": "$(inherited) -enable-upcoming-feature InferSendableFromCaptures",
                 "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator", "SUPPORTS_MACCATALYST": "NO",
                 "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
             }
@@ -122,6 +123,7 @@ def generate() -> dict[str, str]:
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "DEBUG $(inherited)" if debug else "$(inherited)",
             "SWIFT_COMPILATION_MODE": "incremental" if debug else "wholemodule",
             "ENABLE_TESTABILITY": "YES" if debug else "NO", "ONLY_ACTIVE_ARCH": "YES" if debug else "NO",
+            "COPY_PHASE_STRIP": "NO" if debug else "YES",
         }
         fields = " ".join(f"{k} = {quote(v)};" for k, v in sorted(settings.items()))
         project_configs.append(add("projectConfig:" + configuration, "XCBuildConfiguration",
@@ -153,7 +155,8 @@ def generate() -> dict[str, str]:
     scheme = f'''<?xml version="1.0" encoding="UTF-8"?>
 <Scheme LastUpgradeVersion="1600" version="1.3">
   <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES"><BuildActionEntries>{build_entries}</BuildActionEntries></BuildAction>
-  <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="YES">
+  <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="NO">
+    <EnvironmentVariables><EnvironmentVariable key="MIDINERO_UI_TEST_STORE" value="B08991D7-2B7B-4A47-9B3C-411D22BC725B" isEnabled="YES"/></EnvironmentVariables>
     <Testables><TestableReference skipped="NO" parallelizable="NO">{reference('MiDineroTests')}</TestableReference><TestableReference skipped="NO" parallelizable="NO">{reference('MiDineroUITests')}</TestableReference></Testables>
   </TestAction>
   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES"><BuildableProductRunnable runnableDebuggingMode="0">{reference('MiDinero')}</BuildableProductRunnable></LaunchAction>

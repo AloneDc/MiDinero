@@ -27,7 +27,9 @@ def select_simulator(inventory: dict, destinations: str, requested: str | None =
         choices = [device for device in choices if device["udid"] == requested]
     if not choices:
         raise ValueError("No available iPhone (iOS >= 17) matches Xcode destinations or the detected Simulator SDK.")
-    choices.sort(key=lambda device: (device["version"], device["name"], device["udid"]), reverse=True)
+    # Prefer the installed SDK's runtime, even when CoreSimulator advertises
+    # newer runtimes installed by another Xcode on the same hosted image.
+    choices.sort(key=lambda device: (device["runtimeVersion"] == sdk_version, device["version"], device["name"], device["udid"]), reverse=True)
     selected = choices[0]
     selected.pop("version")
     return selected

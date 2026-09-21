@@ -10,7 +10,7 @@ y Charts; sin cuentas, backend, sincronización ni dependencias externas de ejec
 
 ## Abrir y ejecutar
 
-- Mac con Xcode 15 o posterior y un SDK/Simulator de iOS 17 o posterior.
+- Mac con Xcode 16 o posterior para el pipeline de evidencia; Simulator iOS 17 o posterior.
 - iPhone con iOS 17 o posterior. Elige una versión de Xcode compatible con su iOS.
 - Abre `MiDinero.xcodeproj`, selecciona el scheme **MiDinero** y un iPhone Simulator;
   ejecuta con **⌘R**. El proyecto está incluido; no necesitas generadores ni paquetes.
@@ -93,17 +93,22 @@ En Xcode: **⌘U** ejecuta unitarias, persistencia y UI. Desde una terminal en M
 
 ```bash
 swift test                                 # 17 pruebas del núcleo Foundation
-xcrun simctl list devices available
-SIMULATOR_ID=<UUID_DE_UN_IPHONE> bash scripts/validate_mac.sh
+bash scripts/validate_mac.sh               # detecta Xcode, SDK y un iPhone disponible
+# Opcional: SIMULATOR_ID=<UUID> bash scripts/validate_mac.sh
 ```
 
-El script compila Debug, ejecuta XCTest/XCUITest con `.xcresult` y compila Release.
+El script compila Debug y los tests, enumera las pruebas mediante Xcode, ejecuta
+XCTest/XCUITest con `.xcresult` y compila Release. Conserva comandos, logs y
+resultados en `build/ci-evidence/`; mueve ese directorio antes de repetir localmente.
 Los scripts auxiliares usan Python 3.10 o posterior; abrir/compilar desde Xcode no lo requiere.
-Las seis pruebas de persistencia usan almacenes temporales o en memoria. La prueba
+Las siete pruebas de persistencia usan almacenes temporales o en memoria.
+Otra prueba invoca `perform()` directamente y comprueba el contenedor com?n, la
+lectura desde `LedgerStore` y la reapertura del archivo. El scheme de tests usa un
+directorio separado; la prueba falla si falta su variable de aislamiento. La prueba
 UI usa un directorio con UUID independiente de los datos personales y comprueba
 registro, reapertura, edición, reporte, cancelación de borrado y eliminación.
 
-La prueba del servicio usado por el intent no sustituye ejecutar Siri/Atajos reales.
+Invocar `perform()` en XCTest no sustituye la resoluci?n y ejecuci?n de Siri/Atajos reales.
 La [matriz de validación en Mac/iPhone](docs/VALIDATION.md) cubre esa diferencia.
 
 Comprobaciones disponibles también en Windows:

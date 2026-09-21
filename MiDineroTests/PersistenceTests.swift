@@ -4,6 +4,22 @@ import XCTest
 
 final class PersistenceTests: XCTestCase {
     @MainActor
+    func testSavedIncomeAndExpenseFeedMonthlyBalance() throws {
+        let container = try PersistenceController.makeContainer(inMemory: true)
+        let repository = TransactionRepository(container: container)
+        let date = try Fixtures.date("2026-09-15T12:00:00-05:00")
+        try repository.save(TransactionDraft(amountText: "100", type: .income, categoryID: "other", date: date))
+        try repository.save(TransactionDraft(amountText: "12.50", categoryID: "food", date: date))
+        let records = try TransactionRepository(container: container).records()
+        XCTAssertEqual(records.filter { $0.type == .income }.count, 1)
+        let summary = MonthlySummary.build(records: records, month: date, calendar: Fixtures.calendar)
+        XCTAssertEqual(summary.income, 100)
+        XCTAssertEqual(summary.expense, Decimal(string: "12.50"))
+        XCTAssertEqual(summary.balance, Decimal(string: "87.50"))
+        XCTAssertEqual(summary.transactionCount, 2)
+    }
+
+    @MainActor
     func testIntentWriteSurvivesReopeningAndFeedsAllSummaries() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

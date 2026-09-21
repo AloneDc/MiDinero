@@ -20,7 +20,7 @@ final class PersistenceController {
         )
         var directory = support.appendingPathComponent("MiDinero", isDirectory: true)
         #if DEBUG
-        // UI tests never delete or read the personal store; the UUID survives their relaunch.
+        // Hosted unit/UI tests never use the personal store; the UUID survives relaunch.
         if let testID = ProcessInfo.processInfo.environment["MIDINERO_UI_TEST_STORE"],
            let uuid = UUID(uuidString: testID) {
             directory = support.appendingPathComponent("UITests-\(uuid.uuidString)", isDirectory: true)

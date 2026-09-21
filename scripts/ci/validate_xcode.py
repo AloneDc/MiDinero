@@ -7,8 +7,10 @@ from pathlib import Path
 import platform
 import re
 import shlex
+import signal
 import subprocess
 import sys
+import threading
 from datetime import datetime, timezone
 
 from xcode_evidence import discovered_methods, require_complete_tests, select_simulator, test_counts
@@ -28,20 +30,33 @@ class Validation:
         if os.environ.get("GITHUB_RUN_ID"):
             self.result["run_url"] = f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
 
-    def command(self, name: str, args: list[str], *, required: bool = True) -> str:
+    def command(self, name: str, args: list[str], *, required: bool = True, timeout: int = 600) -> str:
         print(f"\n$ {shlex.join(args)}", flush=True)
-        entry = {"name": name, "argv": args, "exit_code": None}
+        entry = {"name": name, "argv": args, "exit_code": None, "timeout_seconds": timeout}
         self.result["commands"].append(entry)
         chunks = []
         with (EVIDENCE / f"{name}.log").open("w", encoding="utf-8") as log:
             process = subprocess.Popen(args, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                       text=True, encoding="utf-8", errors="replace")
+                                       text=True, encoding="utf-8", errors="replace", start_new_session=True)
+            def terminate() -> None:
+                entry["timed_out"] = True
+                print(f"{name} exceeded {timeout} seconds; stopping its process group.", flush=True)
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            watchdog = threading.Timer(timeout, terminate)
+            watchdog.start()
             assert process.stdout is not None
-            for line in process.stdout:
-                print(line, end="", flush=True)
-                log.write(line)
-                chunks.append(line)
-            entry["exit_code"] = process.wait()
+            try:
+                for line in process.stdout:
+                    print(line, end="", flush=True)
+                    log.write(line)
+                    log.flush()
+                    chunks.append(line)
+                entry["exit_code"] = process.wait()
+            finally:
+                watchdog.cancel()
         self.save()
         if required and entry["exit_code"]:
             raise RuntimeError(f"{name} exited {entry['exit_code']}; see {name}.log")
@@ -80,7 +95,7 @@ class Validation:
         print(f"Selected available destination: {device['name']} / iOS {device['runtimeVersion']} / {device['udid']}")
         if device["state"] != "Booted":
             self.command("simulator-boot", ["xcrun", "simctl", "boot", device["udid"]])
-        self.command("simulator-ready", ["xcrun", "simctl", "bootstatus", device["udid"], "-b"])
+        self.command("simulator-ready", ["xcrun", "simctl", "bootstatus", device["udid"], "-b"], timeout=300)
         self.command("destinations-after-boot", base + ["-sdk", "iphonesimulator", "-showdestinations"])
         self.command("build-settings", base + ["-sdk", "iphonesimulator", "-showBuildSettings"])
         options = ["-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device['udid']}",
@@ -103,11 +118,13 @@ class Validation:
                 expected.extend(re.findall(r"\bfunc (test[A-Z]\w*)\s*\(", source.read_text(encoding="utf-8")))
         self.result["expected_source_tests"] = sorted(expected)
         self.command("tests", base + options + ["-parallel-testing-enabled", "NO", "-maximum-concurrent-test-simulator-destinations", "1",
-                     "-resultBundlePath", str(EVIDENCE / "Tests.xcresult"), "test-without-building"], required=False)
+                     "-resultBundlePath", str(EVIDENCE / "Tests.xcresult"), "test-without-building"], required=False, timeout=900)
         test_exit = self.result["commands"][-1]["exit_code"]
         summary = self.json_command("test-summary", ["xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(EVIDENCE / "Tests.xcresult")])
         self.result["tests"] = test_counts(summary)
         self.json_command("test-details", ["xcrun", "xcresulttool", "get", "test-results", "tests", "--path", str(EVIDENCE / "Tests.xcresult")])
+        self.command("test-attachments", ["xcrun", "xcresulttool", "export", "attachments", "--path", str(EVIDENCE / "Tests.xcresult"),
+                     "--output-path", str(EVIDENCE / "attachments")])
         require_complete_tests(discovered, expected, self.result["tests"])
         if test_exit != 0:
             raise RuntimeError(f"xcodebuild test-without-building returned {test_exit}, even though test counts were parsed.")
