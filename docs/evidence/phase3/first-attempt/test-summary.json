@@ -1,0 +1,51 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "48B2DA2E-AF18-4E36-BB25-B25969A4EBCF",
+        "deviceName": "iPhone SE (3rd generation)",
+        "modelName": "iPhone SE (3rd generation)",
+        "osBuildNumber": "23C54",
+        "osVersion": "26.2",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 1,
+      "passedTests": 25,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "MiDinero \u00b7 Built with macOS 15.7.9",
+  "expectedFailures": 0,
+  "failedTests": 1,
+  "finishTime": 1790028821.715,
+  "passedTests": 25,
+  "result": "Failed",
+  "skippedTests": 0,
+  "startTime": 1790028712.546,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "Failed to tap \"Cancelar\" Button: No matches found for Elements matching predicate '\"Cancelar\" IN identifiers' from input {(\n    Button, identifier: 'house', label: 'Inicio',\n    Button, identifier: 'list.bullet', label: 'Movimientos', Selected,\n    Button, identifier: 'chart.bar.xaxis', label: 'Reporte',\n    Button, label: 'Eliminar movimiento',\n    Button, label: 'Opciones',\n    Button, label: 'Registrar gasto',\n    Button, identifier: 'transaction.63446D45-BA25-4A19-B8F4-00F0882CF182', label: 'Comida, 21 set. 2026, 10:12\u202fp.\u00a0m., \u2212S/\u00a020.00, Gasto'\n)}",
+      "targetName": "MiDineroUITests",
+      "testIdentifier": 26,
+      "testIdentifierString": "MiDineroUITests/testRegisterReopenEditReportAndDelete()",
+      "testIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests/testRegisterReopenEditReportAndDelete",
+      "testName": "testRegisterReopenEditReportAndDelete()"
+    }
+  ],
+  "title": "Test - MiDinero",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "29% of duration",
+      "text": "1 longest test run with outlier durations exceeding 0.12s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 26
+}

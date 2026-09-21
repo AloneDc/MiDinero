@@ -37,6 +37,10 @@ comprobó persistencia compartida. Simulator registró Launch Services `-10814` 
 actualizar parámetros del App Shortcut. El descubrimiento y la ejecución a través
 de Siri/Atajos siguen pendientes de iPhone físico; ver la
 [evidencia y los límites](ASTRA_EVALUATION.md#fase-2--validación-xcode).
+En fase 3, el host de pruebas de Simulator 26.2 también emitió
+`LinkDaemon.ApplicationServiceInstance.Errors Code=2` al refrescar parámetros.
+La extracción correcta del provider y las frases en el archive no sustituye esa
+verificación del sistema en un teléfono.
 
 - Los parámetros no opcionales sin valor pueden provocar una pregunta del sistema.
   La nota `String?` no provoca una pregunta automática; esto está documentado por

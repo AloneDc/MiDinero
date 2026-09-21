@@ -104,6 +104,9 @@ del sistema ni firma/protección de archivos/autenticación reales. En fase 2 hu
 un diagnóstico Launch Services `-10814` al actualizar los shortcuts en el host de
 tests; no prueba un fallo en iPhone ni permite darlo por resuelto. Las pruebas de
 descubrimiento, Siri, app terminada y reinicio quedan explícitas en el plan físico.
+El host de tests de Simulator 26.2 también registró
+`LinkDaemon.ApplicationServiceInstance.Errors Code=2` al refrescar parámetros;
+se conserva como límite de validación, aunque `perform()` y persistencia sí pasaron.
 Referencias: [AppIntent](https://developer.apple.com/documentation/appintents/appintent),
 [parámetros](https://developer.apple.com/documentation/appintents/adding-parameters-to-an-app-intent),
 [autenticación](https://developer.apple.com/documentation/appintents/intentauthenticationpolicy/requireslocaldeviceauthentication).

@@ -441,6 +441,11 @@ el test a ambas presentaciones nativas, esperando la confirmación, cancelando p
 el control disponible y verificando que desaparece sin eliminar la fila antes de
 probar el borrado confirmado. No se cambia la UI ni se elimina una aserción de negocio.
 La primera ejecución global es **failure**, no se presenta como CI completamente verde.
+Se conserva el [resumen nativo del fallo](evidence/phase3/first-attempt/test-summary.json)
+y la [jerarquía real de UI](evidence/phase3/first-attempt/confirmation-ui-hierarchy.txt).
+Simulator 26.2 registró además `LinkDaemon.ApplicationServiceInstance.Errors Code=2`
+al refrescar shortcuts desde el host de tests; no se confunde con una ejecución
+física aprobada. El test directo del intent sí pasó en ambos SDKs.
 
 Comandos locales realizados:
 
@@ -461,6 +466,67 @@ comandos Apple. Diez rutas de prueba de `.gitignore` quedaron excluidas; no se
 crearon esos archivos. Revisión adicional de 95 blobs históricos: sin patrones de
 claves/tokens configurados. No sustituye un análisis exhaustivo de todos los secretos
 posibles. Diff revisado antes de publicar; sin código Swift de producto modificado.
+
+### Estados de dispositivo comprobados
+
+Segunda ejecución del archive:
+[35661791709](https://github.com/AloneDc/MiDinero/actions/runs/35661791709),
+revisión `4ebeabef08c2798cbea88853dadfddeb9b8b4a8b`. Xcode 26.2 (17C52),
+Apple Swift 6.2.3, SDK iPhoneOS 26.2, macOS 15.7.9 arm64. Build y archive nuevamente
+aprobados, sin warnings; las comprobaciones adicionales de metadata también pasaron.
+
+| Estado | Resultado demostrado |
+| --- | --- |
+| BUILDABLE | Sí: Release para `generic/platform=iOS`, arm64, SDK 26.2, mínimo iOS 17 |
+| ARCHIVABLE | Sí: xcarchive de aplicación estructuralmente válido, **sin firma** |
+| SIGNABLE | No verificado: falta Team/certificado/clave privada/perfil reales |
+| DISTRIBUTABLE | No: no existe IPA exportada y firmada |
+| TESTFLIGHT_READY | No: no hubo upload, procesamiento Apple, asignación de tester ni instalación |
+
+Evidencia versionada: [resultado y estados](evidence/phase3/device/result.json),
+[comandos y salidas](evidence/phase3/device/commands.md),
+[metadata de App Intents original](evidence/phase3/device/extract.actionsdata),
+[procedencia y SHA-256 del artefacto](evidence/phase3/device/artifact-provenance.json).
+El archivo tar del xcarchive y los logs completos están en el
+[artefacto de GitHub](https://github.com/AloneDc/MiDinero/actions/runs/35661791709/artifacts/10667294481)
+durante 14 días. El binario informa `platform IOS`, `minos 17.0`, `sdk 26.2`;
+codesign informa «code object is not signed at all». No se hace pasar por una IPA.
+
+La segunda ejecución completa terminó **success** con tres jobs aprobados:
+
+| Job | Resultado real |
+| --- | --- |
+| Simulator / Xcode 16.4, Swift 6.1.2, iOS 18.5 | Debug + build-for-testing + Release aprobados; 26 descubiertos, 26 ejecutados, 26 passed, 0 failed/skipped |
+| Simulator / Xcode 26.2, Swift 6.2.3, iOS 26.2 | Debug + build-for-testing + Release aprobados; 26 descubiertos, 26 ejecutados, 26 passed, 0 failed/skipped |
+| Device / Xcode 26.2, SDK iPhoneOS 26.2 | Release build + archive + validación estructural aprobados, sin firma |
+
+Son los mismos **26 tests**, ejecutados en dos entornos (52 ejecuciones), más seis
+comprobaciones Python por job Simulator. El XCUITest ahora verifica cancelación
+y borrado en ambas presentaciones del sistema; no se saltó ni marcó como expected failure.
+Persistencia e invocación directa del intent están incluidas en los 25 tests del
+target alojado en app. Ninguno invoca la app Atajos del iPhone.
+
+Resúmenes nativos conservados:
+[Simulator 18.5](evidence/phase3/simulator-16.4/test-summary.json) y
+[Simulator 26.2](evidence/phase3/simulator-26.2/test-summary.json), con inventarios,
+detalle individual, comandos y procedencia en las mismas carpetas. Cada artefacto
+se descargó y contrastó con el SHA-256 publicado por GitHub. Los bundles xcresult
+completos se conservan dentro de sus ZIP en `build/remote/35661791709/` (ignorado);
+las evidencias esenciales quedan versionadas, sin modificar resultados nativos.
+Se inspeccionaron visualmente dos capturas reales de Simulator 26.2:
+[confirmación como popover](evidence/phase3/simulator-26.2/confirmation-popover.png)
+y [estado vacío tras borrar y reabrir](evidence/phase3/simulator-26.2/empty-after-delete.png).
+Se copiaron sin editar y con hash/procedencia; no son capturas de un iPhone físico.
+
+No hubo errores de compilador ni warnings Swift/concurrencia. En cada job Simulator
+queda un warning de la herramienta Apple sobre extracción de metadata del target
+UITests, que no contiene App Intents; el target principal sí la genera. Los logs
+CoreData del caso de ruta inválida pertenecen al test negativo de persistencia,
+que pasó; el diagnóstico de actualización de shortcuts queda como límite ya descrito.
+
+Después del commit validado `4ebeabe`, la entrega solo añade documentación y
+evidencia. Se revisó el diff completo contra `772c453`, el índice por secretos y
+los enlaces locales, y se publicó en main. No se ejecutó `ios-testflight.yml`.
 
 ### Límites y pendientes
 

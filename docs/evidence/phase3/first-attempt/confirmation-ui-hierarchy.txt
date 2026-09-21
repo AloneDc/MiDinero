@@ -1,0 +1,133 @@
+Application, 0x102396010, pid: 14606, label: 'MiDinero' <App element pid: 14606>
+  Window (Main), 0x102397d70, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4352955904.4>
+    Other, 0x102398e70, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4705306400.434>
+    Other, 0x102398f90, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4352966960.5>
+      Other, 0x1023957d0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4352968496.6>
+        Other, 0x10226f6b0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4352666896.7>
+          Other, 0x10226e560, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4371242400.8>
+            Other, 0x10226e210, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4370558544.9>
+              Other, 0x10226efb0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4348831296.10>
+                Other, 0x10226fd40, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4370828352.12>
+                  Other, 0x10226f9c0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4348844528.150>
+                    Other, 0x10226f310, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4697636992.151>
+                      Other, 0x10226e8c0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4371330272.152>
+                        Other, 0x1022700a0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4348921584.153>
+                          NavigationBar, 0x102270400, {{0.0, 20.0}, {375.0, 106.0}}, identifier: 'Movimientos' <AX element pid: 14606, elementOrHash.elementID: 4353525488.154>
+                            Button, 0x1022715b0, {{20.0, 24.0}, {36.0, 36.0}}, label: 'Opciones' <AX element pid: 14606, elementOrHash.elementID: 4696607872.157>
+                            Button, 0x102270760, {{319.0, 24.0}, {36.0, 36.0}}, label: 'Registrar gasto' <AX element pid: 14606, elementOrHash.elementID: 4349216896.158>
+                            StaticText, 0x102271930, {{16.0, 77.5}, {203.5, 41.0}}, label: 'Movimientos' <AX element pid: 14606, elementOrHash.elementID: 4353533504.159>
+                          Other, 0x102271c80, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353599840.155>
+                            Other, 0x102270ab0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353662640.160>
+                              Other, 0x102271fe0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353520208.162>
+                                Other, 0x102272350, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353577136.414>
+                                  CollectionView, 0x1022726c0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4364173312.164>
+                                    Other, 0x102272a20, {{-16.0, -1208.0}, {407.0, 2819.0}} <AX element pid: 14606, elementOrHash.elementID: 4371250224.165>
+                                    Other, 0x102272d80, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353552912.166>
+                                    Other, 0x102273c10, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353552496.167>
+                                    Cell, 0x102273890, {{16.0, 126.0}, {343.0, 40.5}} <AX element pid: 14606, elementOrHash.elementID: 4364760064.168>
+                                      Other, 0x102273f80, {{16.0, 126.0}, {343.0, 40.5}} <AX element pid: 14606, elementOrHash.elementID: 4696666816.172>
+                                      Other, 0x102274670, {{16.0, 126.0}, {343.0, 40.5}} <AX element pid: 14606, elementOrHash.elementID: 4353603072.173>
+                                        Other, 0x102274a10, {{16.0, 126.0}, {343.0, 40.5}} <AX element pid: 14606, elementOrHash.elementID: 4356308992.179>
+                                          Other, 0x1022742f0, {{16.0, 126.0}, {343.0, 40.5}} <AX element pid: 14606, elementOrHash.elementID: 4697288080.415>
+                                            StaticText, 0x102274db0, {{16.0, 126.0}, {343.0, 40.5}}, label: 'Más recientes primero' <AX element pid: 14606, elementOrHash.elementID: 4697287648.418>
+                                    Cell, 0x10226ec40, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4380662272.169>
+                                      Other, 0x102275130, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4349301376.174>
+                                        Other, 0x102275b70, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4371132064.180>
+                                      Other, 0x102275480, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4371131136.175>
+                                        Other, 0x102275ef0, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4364783616.181>
+                                          Other, 0x1022757f0, {{16.0, 166.5}, {343.0, 80.5}} <AX element pid: 14606, elementOrHash.elementID: 4696603008.416>
+                                            Button, 0x1022765a0, {{16.0, 166.5}, {343.0, 80.5}}, identifier: 'transaction.63446D45-BA25-4A19-B8F4-00F0882CF182', label: 'Comida, 21 set. 2026, 10:12 p. m., −S/ 20.00, Gasto' <AX element pid: 14606, elementOrHash.elementID: 4697268448.419>
+                                              Image, 0x102276930, {{39.5, 187.5}, {11.5, 19.5}}, identifier: 'fork.knife', label: 'Comida' <AX element pid: 14606, elementOrHash.elementID: 4697288864.421>
+                                              StaticText, 0x102276240, {{70.0, 188.0}, {60.0, 20.5}}, label: 'Comida' <AX element pid: 14606, elementOrHash.elementID: 4697289296.422>
+                                              StaticText, 0x102276ca0, {{70.0, 212.5}, {136.5, 14.5}}, label: '21 set. 2026, 10:12 p. m.' <AX element pid: 14606, elementOrHash.elementID: 4696626480.423>
+                                              StaticText, 0x102277000, {{264.0, 188.0}, {79.0, 20.5}}, label: '−S/ 20.00' <AX element pid: 14606, elementOrHash.elementID: 4697169936.424>
+                                              Image, 0x102277340, {{276.0, 214.0}, {11.5, 11.5}}, identifier: 'arrow.up.right', label: 'arrow.up.right' <AX element pid: 14606, elementOrHash.elementID: 4697170368.425>
+                                              StaticText, 0x1022776b0, {{276.0, 212.5}, {67.0, 14.5}}, label: 'Gasto' <AX element pid: 14606, elementOrHash.elementID: 4697170800.426>
+                                    Cell, 0x102277d50, {{16.0, 247.0}, {343.0, 30.0}} <AX element pid: 14606, elementOrHash.elementID: 4364804096.170>
+                                      Other, 0x102277a00, {{16.0, 247.0}, {343.0, 30.0}} <AX element pid: 14606, elementOrHash.elementID: 4349334208.176>
+                                      Other, 0x1022780a0, {{16.0, 247.0}, {343.0, 30.0}} <AX element pid: 14606, elementOrHash.elementID: 4696681584.177>
+                                        Other, 0x102278400, {{16.0, 247.0}, {343.0, 30.0}} <AX element pid: 14606, elementOrHash.elementID: 4364805632.182>
+                                          Other, 0x102278760, {{16.0, 247.0}, {343.0, 30.0}} <AX element pid: 14606, elementOrHash.elementID: 4697293072.417>
+                                            StaticText, 0x102278ae0, {{16.0, 247.0}, {343.0, 30.0}}, label: '1 movimientos · Toca uno para editarlo.' <AX element pid: 14606, elementOrHash.elementID: 4697141584.420>
+                                    Other, 0x102278e70, {{342.0, 74.0}, {30.0, 510.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4371079264.171>
+                                      Other, 0x1022791d0, {{369.0, 384.0}, {3.0, 197.0}} <AX element pid: 14606, elementOrHash.elementID: 4371168192.178>
+                                    Other, 0x102279570, {{342.0, 74.0}, {30.0, 510.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4371079264.171>
+                                      Other, 0x1022798c0, {{369.0, 384.0}, {3.0, 197.0}} <AX element pid: 14606, elementOrHash.elementID: 4371168192.178>
+                          Other, 0x102279c50, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4371319488.156>
+                            Other, 0x102279fd0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4370836288.161>
+              Other, 0x10227a320, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370737712.11>
+                Other, 0x10227a6c0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4348837600.13>
+                  TabBar, 0x10227aa40, {{0.0, 584.0}, {375.0, 83.0}}, label: 'Barra de pestañas' <AX element pid: 14606, elementOrHash.elementID: 4370816592.16>
+                    Other, 0x10227ad90, {{37.0, 584.0}, {301.0, 62.0}} <AX element pid: 14606, elementOrHash.elementID: 4370655568.19>
+                      Other, 0x10227b0f0, {{37.0, 584.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4370859072.22>
+                      Other, 0x10227b470, {{37.0, 584.0}, {301.0, 62.0}} <AX element pid: 14606, elementOrHash.elementID: 4370786064.23>
+                        Button, 0x10227b7d0, {{41.0, 588.0}, {103.0, 54.0}}, identifier: 'house', label: 'Inicio' <AX element pid: 14606, elementOrHash.elementID: 4354941440.28>
+                          Image, 0x10227bb20, {{76.0, 594.0}, {33.5, 28.0}}, identifier: 'house.fill', label: 'casa' <AX element pid: 14606, elementOrHash.elementID: 4348857936.37>
+                        Button, 0x10227be80, {{136.0, 588.0}, {103.0, 54.0}}, identifier: 'list.bullet', label: 'Movimientos', Selected <AX element pid: 14606, elementOrHash.elementID: 4379189760.29>
+                          Image, 0x10227c200, {{173.0, 597.5}, {29.5, 21.0}}, identifier: 'list.bullet', label: 'Lista' <AX element pid: 14606, elementOrHash.elementID: 4370815056.38>
+                        Button, 0x10227c580, {{231.0, 588.0}, {103.0, 54.0}}, identifier: 'chart.bar.xaxis', label: 'Reporte' <AX element pid: 14606, elementOrHash.elementID: 4379559936.30>
+                          Image, 0x10227c8f0, {{267.0, 595.0}, {32.0, 25.5}}, identifier: 'chart.bar.xaxis', label: 'chart.bar.xaxis' <AX element pid: 14606, elementOrHash.elementID: 4370811616.39>
+                      Other, 0x10227cc60, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348828864.24>
+                        Other, 0x10227cfc0, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348829440.31>
+                          Other, 0x10227d320, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348813328.40>
+                          Other, 0x10227d680, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348809824.41>
+                            Other, 0x10227da00, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348830880.46>
+                              Other, 0x10227dd80, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348831808.49>
+                                Other, 0x10227e110, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348833248.52>
+                              Other, 0x10227e460, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348708032.50>
+                            Other, 0x10227e7f0, {{136.0, 588.0}, {103.0, 54.0}} <AX element pid: 14606, elementOrHash.elementID: 4348830464.47>
+                Other, 0x10227eb60, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370532448.14>
+                  Other, 0x10227eed0, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370864112.17>
+                    Other, 0x10227f210, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370868720.20>
+                      Other, 0x10227f580, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370866304.25>
+                        Other, 0x10227f8f0, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370829072.32>
+                          Other, 0x10227fc60, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370867392.42>
+                      Other, 0x10227ffc0, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370871648.26>
+                        Other, 0x102280310, {{0.0, 584.0}, {375.0, 83.0}} <AX element pid: 14606, elementOrHash.elementID: 4370869552.33>
+    Other, 0x102280670, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4705328272.435>
+      Other, 0x1022809d0, {{0.0, 0.0}, {375.0, 667.0}}, identifier: 'PopoverDismissRegion', label: 'cerrar mensaje' <AX element pid: 14606, elementOrHash.elementID: 4697224912.436>
+      Popover, 0x102280d60, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4696880016.437>
+        Image, 0x1022810b0, {{-83.0, -120.0}, {540.0, 514.0}} <AX element pid: 14606, elementOrHash.elementID: 4697285872.438>
+        Other, 0x102281430, {{67.0, 30.0}, {240.0, 214.0}} <AX element pid: 14606, elementOrHash.elementID: 4705301648.439>
+          Sheet, 0x1022817b0, {{67.0, 30.0}, {240.0, 214.0}}, label: '¿Eliminar este movimiento?' <AX element pid: 14606, elementOrHash.elementID: 4366127104.441>
+            Other, 0x102281b10, {{67.0, 30.0}, {240.0, 214.0}} <AX element pid: 14606, elementOrHash.elementID: 4705264320.443>
+              Other, 0x102281e60, {{67.0, 30.0}, {240.0, 214.0}} <AX element pid: 14606, elementOrHash.elementID: 4696882976.445>
+                Other, 0x1022821e0, {{67.0, 30.0}, {240.0, 214.0}} <AX element pid: 14606, elementOrHash.elementID: 4697003856.447>
+                Other, 0x102282530, {{67.0, 30.0}, {240.0, 214.0}} <AX element pid: 14606, elementOrHash.elementID: 4705265488.448>
+                  ScrollView, 0x102282880, {{67.0, 30.0}, {240.0, 134.0}} <AX element pid: 14606, elementOrHash.elementID: 4357133824.450>
+                    Other, 0x102282bf0, {{67.0, 30.0}, {240.0, 134.0}} <AX element pid: 14606, elementOrHash.elementID: 4705292432.453>
+                      StaticText, 0x102282f40, {{97.0, 52.5}, {180.0, 42.5}}, label: '¿Eliminar este movimiento?' <AX element pid: 14606, elementOrHash.elementID: 4705300832.460>
+                      StaticText, 0x1022832c0, {{97.0, 101.5}, {180.0, 58.0}}, label: 'Comida · S/ 20.00. Esta acción no se puede deshacer.' <AX element pid: 14606, elementOrHash.elementID: 4705302992.461>
+                    Other, 0x102283650, {{274.0, 64.0}, {30.0, 100.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4696743376.454>
+                      Other, 0x1022839c0, {{301.0, -9.0}, {3.0, 36.0}} <AX element pid: 14606, elementOrHash.elementID: 4696941536.462>
+                    Other, 0x102283d60, {{67.0, 131.0}, {240.0, 30.0}}, label: 'Barra de desplazamiento horizontal, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697160592.455>
+                      Other, 0x1022840b0, {{28.0, 158.0}, {36.0, 3.0}} <AX element pid: 14606, elementOrHash.elementID: 4697123840.463>
+                    Other, 0x102284400, {{274.0, 64.0}, {30.0, 100.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4696743376.454>
+                      Other, 0x102284770, {{301.0, -9.0}, {3.0, 36.0}} <AX element pid: 14606, elementOrHash.elementID: 4696941536.462>
+                    Other, 0x102284b00, {{67.0, 131.0}, {240.0, 30.0}}, label: 'Barra de desplazamiento horizontal, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697160592.455>
+                      Other, 0x102284ea0, {{28.0, 158.0}, {36.0, 3.0}} <AX element pid: 14606, elementOrHash.elementID: 4697123840.463>
+                  ScrollView, 0x102285200, {{67.0, 164.0}, {240.0, 80.0}} <AX element pid: 14606, elementOrHash.elementID: 4357100032.451>
+                    Other, 0x102285580, {{67.0, 164.0}, {240.0, 80.0}} <AX element pid: 14606, elementOrHash.elementID: 4705271696.456>
+                      Other, 0x102285900, {{83.0, 180.0}, {208.0, 48.0}} <AX element pid: 14606, elementOrHash.elementID: 4705272704.464>
+                        Button, 0x102285c60, {{83.0, 180.0}, {208.0, 48.0}}, label: 'Eliminar movimiento' <AX element pid: 14606, elementOrHash.elementID: 4696916960.468>
+                    Other, 0x102285fd0, {{274.0, 164.0}, {30.0, 59.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697091456.457>
+                      Other, 0x102286330, {{301.0, 254.0}, {3.0, 7.0}} <AX element pid: 14606, elementOrHash.elementID: 4697092224.465>
+                    Other, 0x1022866a0, {{88.0, 211.0}, {198.0, 30.0}}, label: 'Barra de desplazamiento horizontal, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697284144.458>
+                      Other, 0x102286a40, {{157.0, 238.0}, {7.0, 3.0}} <AX element pid: 14606, elementOrHash.elementID: 4697169344.466>
+                    Other, 0x102286da0, {{274.0, 164.0}, {30.0, 59.0}}, label: 'Barra de desplazamiento vertical, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697091456.457>
+                      Other, 0x102287880, {{301.0, 254.0}, {3.0, 7.0}} <AX element pid: 14606, elementOrHash.elementID: 4697092224.465>
+                    Other, 0x102287c00, {{88.0, 211.0}, {198.0, 30.0}}, label: 'Barra de desplazamiento horizontal, 1 página', value: 0% <AX element pid: 14606, elementOrHash.elementID: 4697284144.458>
+                      Other, 0x102287f50, {{157.0, 238.0}, {7.0, 3.0}} <AX element pid: 14606, elementOrHash.elementID: 4697169344.466>
+        Other, 0x1022882d0, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4697165280.440>
+          Other, 0x102288620, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4371161696.442>
+            Other, 0x102288980, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4370986352.444>
+              Other, 0x102288d00, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705406368.446>
+                Other, 0x102289060, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705407936.449>
+                  Other, 0x1022893b0, {{67.0, 30.0}, {0.0, 0.0}} <AX element pid: 14606, elementOrHash.elementID: 4705408352.452>
+                    Other, 0x102289710, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705403248.459>
+                      Other, 0x102289a80, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705411408.467>
+                        Other, 0x102289e00, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705389472.469>
+                          Other, 0x10228a160, {{67.0, 30.0}, {240.0, 227.0}} <AX element pid: 14606, elementOrHash.elementID: 4705388176.470>
+  Window, 0x10228a4d0, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4356260864.267>
+    Other, 0x10228a820, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4353495264.269>
+      Other, 0x10228ab90, {{0.0, 0.0}, {375.0, 667.0}} <AX element pid: 14606, elementOrHash.elementID: 4696934656.271>

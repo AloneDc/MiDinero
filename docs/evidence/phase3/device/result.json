@@ -1,0 +1,355 @@
+{
+  "status": "DEVICE_BUILD_AND_UNSIGNED_ARCHIVE_VERIFIED",
+  "started_at": "2026-09-21T22:16:37.308081+00:00",
+  "host": "macOS-15.7.9-arm64-arm-64bit-Mach-O",
+  "commands": [
+    {
+      "name": "macos",
+      "argv": [
+        "sw_vers"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "architecture",
+      "argv": [
+        "uname",
+        "-m"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "revision",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "xcode-version",
+      "argv": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "swift-version",
+      "argv": [
+        "xcrun",
+        "swift",
+        "--version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "sdk-version",
+      "argv": [
+        "xcrun",
+        "--sdk",
+        "iphoneos",
+        "--show-sdk-version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "sdks",
+      "argv": [
+        "xcodebuild",
+        "-showsdks"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "export-help",
+      "argv": [
+        "xcodebuild",
+        "-help"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "upload-help",
+      "argv": [
+        "xcrun",
+        "altool",
+        "--help"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "build-settings",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Release",
+        "-destination",
+        "generic/platform=iOS",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/Device-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "CODE_SIGNING_REQUIRED=NO",
+        "CODE_SIGN_IDENTITY=",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-showBuildSettings"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "device-release-build",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Release",
+        "-destination",
+        "generic/platform=iOS",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/Device-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "CODE_SIGNING_REQUIRED=NO",
+        "CODE_SIGN_IDENTITY=",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/device-evidence/DeviceBuild.xcresult",
+        "build"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "device-archive",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Release",
+        "-destination",
+        "generic/platform=iOS",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/Device-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "CODE_SIGNING_REQUIRED=NO",
+        "CODE_SIGN_IDENTITY=",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-archivePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/device-evidence/Archive.xcresult",
+        "archive"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "binary-architectures",
+      "argv": [
+        "xcrun",
+        "lipo",
+        "-archs",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app/MiDinero"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "binary-platform",
+      "argv": [
+        "xcrun",
+        "vtool",
+        "-show-build",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app/MiDinero"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "linked-frameworks",
+      "argv": [
+        "xcrun",
+        "otool",
+        "-L",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app/MiDinero"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "code-signature",
+      "argv": [
+        "codesign",
+        "-dvv",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app"
+      ],
+      "exit_code": 1,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "binary-uuid",
+      "argv": [
+        "xcrun",
+        "dwarfdump",
+        "--uuid",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app/MiDinero"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "dsym-uuid",
+      "argv": [
+        "xcrun",
+        "dwarfdump",
+        "--uuid",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/dSYMs/MiDinero.app.dSYM"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "copy-intent-evidence",
+      "argv": [
+        "ditto",
+        "/Users/runner/work/MiDinero/MiDinero/build/device/MiDinero.xcarchive/Products/Applications/MiDinero.app/Metadata.appintents",
+        "/Users/runner/work/MiDinero/MiDinero/build/device-evidence/Metadata.appintents"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "package-unsigned-archive",
+      "argv": [
+        "tar",
+        "-czf",
+        "/Users/runner/work/MiDinero/MiDinero/build/device-evidence/MiDinero-unsigned.xcarchive.tar.gz",
+        "-C",
+        "/Users/runner/work/MiDinero/MiDinero/build/device",
+        "MiDinero.xcarchive"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    }
+  ],
+  "error": null,
+  "warnings": [],
+  "run_url": "https://github.com/AloneDc/MiDinero/actions/runs/35661791709",
+  "states": {
+    "BUILDABLE": "VERIFIED_RELEASE_IPHONEOS",
+    "ARCHIVABLE": "VERIFIED_UNSIGNED_DEVICE_ARCHIVE",
+    "SIGNABLE": "NOT_VERIFIED_NO_CREDENTIALS",
+    "DISTRIBUTABLE": "NO_SIGNED_IPA",
+    "TESTFLIGHT_READY": "NO_NOT_UPLOADED"
+  },
+  "developer_dir": "/Applications/Xcode_26.2.app/Contents/Developer",
+  "structure": {
+    "archive_properties": {
+      "ApplicationPath": "Applications/MiDinero.app",
+      "Architectures": [
+        "arm64"
+      ],
+      "CFBundleIdentifier": "com.eduardo.MiDinero",
+      "CFBundleShortVersionString": "0.1.0",
+      "CFBundleVersion": "1",
+      "SigningIdentity": "",
+      "Team": ""
+    },
+    "app_info": {
+      "BuildMachineOSBuild": "24G830",
+      "CFBundleDevelopmentRegion": "es",
+      "CFBundleDisplayName": "MiDinero",
+      "CFBundleExecutable": "MiDinero",
+      "CFBundleIcons": {
+        "CFBundlePrimaryIcon": {
+          "CFBundleIconFiles": [
+            "AppIcon60x60"
+          ],
+          "CFBundleIconName": "AppIcon"
+        }
+      },
+      "CFBundleIcons~ipad": {
+        "CFBundlePrimaryIcon": {
+          "CFBundleIconFiles": [
+            "AppIcon60x60",
+            "AppIcon76x76"
+          ]
+        }
+      },
+      "CFBundleIdentifier": "com.eduardo.MiDinero",
+      "CFBundleInfoDictionaryVersion": "6.0",
+      "CFBundleLocalizations": [
+        "es"
+      ],
+      "CFBundleName": "MiDinero",
+      "CFBundlePackageType": "APPL",
+      "CFBundleShortVersionString": "0.1.0",
+      "CFBundleSupportedPlatforms": [
+        "iPhoneOS"
+      ],
+      "CFBundleVersion": "1",
+      "DTCompiler": "com.apple.compilers.llvm.clang.1_0",
+      "DTPlatformBuild": "23C53",
+      "DTPlatformName": "iphoneos",
+      "DTPlatformVersion": "26.2",
+      "DTSDKBuild": "23C53",
+      "DTSDKName": "iphoneos26.2",
+      "DTXcode": "2620",
+      "DTXcodeBuild": "17C52",
+      "ITSAppUsesNonExemptEncryption": false,
+      "LSRequiresIPhoneOS": true,
+      "MinimumOSVersion": "17.0",
+      "UIApplicationSceneManifest": {
+        "UIApplicationSupportsMultipleScenes": false
+      },
+      "UIApplicationSupportsIndirectInputEvents": true,
+      "UIDeviceFamily": [
+        1
+      ],
+      "UILaunchScreen": {},
+      "UIRequiredDeviceCapabilities": [
+        "arm64"
+      ],
+      "UISupportedInterfaceOrientations": [
+        "UIInterfaceOrientationPortrait",
+        "UIInterfaceOrientationLandscapeLeft",
+        "UIInterfaceOrientationLandscapeRight"
+      ]
+    },
+    "privacy": {
+      "NSPrivacyAccessedAPITypes": [],
+      "NSPrivacyCollectedDataTypes": [],
+      "NSPrivacyTracking": false,
+      "NSPrivacyTrackingDomains": []
+    },
+    "architectures": "arm64",
+    "intent_metadata_files": [
+      "Metadata.appintents/version.json",
+      "Metadata.appintents/extract.actionsdata",
+      "Metadata.appintents/nlu/6c9be475eb99be89db8ee33a923d0155.version",
+      "Metadata.appintents/nlu/nlu.lzfse"
+    ]
+  },
+  "archive_sha256": "7d7becc342aefe6f917c03991d880d7e5677d8228e73b15280829630e021dbb0",
+  "finished_at": "2026-09-21T22:18:06.063881+00:00"
+}

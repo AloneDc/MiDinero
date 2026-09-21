@@ -1,0 +1,326 @@
+{
+  "devices": [
+    {
+      "architecture": "arm64",
+      "deviceId": "22A3039C-6A45-47F4-82D4-80C58CA94379",
+      "deviceName": "iPhone SE (3rd generation)",
+      "modelName": "iPhone SE (3rd generation)",
+      "osBuildNumber": "22F77",
+      "osVersion": "18.5",
+      "platform": "iOS Simulator"
+    }
+  ],
+  "testNodes": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "duration": "0.13s",
+                  "durationInSeconds": 0.12538790702819824,
+                  "name": "testPerformWritesToTheContainerAndStoreReadByTheApp()",
+                  "nodeIdentifier": "AppIntentTests/testPerformWritesToTheContainerAndStoreReadByTheApp()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/AppIntentTests/testPerformWritesToTheContainerAndStoreReadByTheApp",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "AppIntentTests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/AppIntentTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            },
+            {
+              "children": [
+                {
+                  "duration": "0.0025s",
+                  "durationInSeconds": 0.002497076988220215,
+                  "name": "testEmptyExportStillHasHeader()",
+                  "nodeIdentifier": "CSVExporterTests/testEmptyExportStillHasHeader()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/CSVExporterTests/testEmptyExportStillHasHeader",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0078s",
+                  "durationInSeconds": 0.007753968238830566,
+                  "name": "testSpreadsheetFormulaInjectionIsNeutralized()",
+                  "nodeIdentifier": "CSVExporterTests/testSpreadsheetFormulaInjectionIsNeutralized()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/CSVExporterTests/testSpreadsheetFormulaInjectionIsNeutralized",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0029s",
+                  "durationInSeconds": 0.0028840303421020508,
+                  "name": "testUTF8EscapingExactAmountsAndUTC()",
+                  "nodeIdentifier": "CSVExporterTests/testUTF8EscapingExactAmountsAndUTC()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/CSVExporterTests/testUTF8EscapingExactAmountsAndUTC",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "CSVExporterTests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/CSVExporterTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            },
+            {
+              "children": [
+                {
+                  "duration": "0.0028s",
+                  "durationInSeconds": 0.002834916114807129,
+                  "name": "testCurrencyScaleCanEvolve()",
+                  "nodeIdentifier": "MoneyTests/testCurrencyScaleCanEvolve()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testCurrencyScaleCanEvolve",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0014s",
+                  "durationInSeconds": 0.0014170408248901367,
+                  "name": "testDecimalInputIsExactForBothKeyboards()",
+                  "nodeIdentifier": "MoneyTests/testDecimalInputIsExactForBothKeyboards()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testDecimalInputIsExactForBothKeyboards",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.00078s",
+                  "durationInSeconds": 0.0007790327072143555,
+                  "name": "testEditingRoundTripPreservesCents()",
+                  "nodeIdentifier": "MoneyTests/testEditingRoundTripPreservesCents()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testEditingRoundTripPreservesCents",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.061s",
+                  "durationInSeconds": 0.060823917388916016,
+                  "name": "testFormattingHonorsLocaleAndCurrency()",
+                  "nodeIdentifier": "MoneyTests/testFormattingHonorsLocaleAndCurrency()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testFormattingHonorsLocaleAndCurrency",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0019s",
+                  "durationInSeconds": 0.0019119977951049805,
+                  "name": "testNoteNormalizationAndLimit()",
+                  "nodeIdentifier": "MoneyTests/testNoteNormalizationAndLimit()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testNoteNormalizationAndLimit",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.00065s",
+                  "durationInSeconds": 0.0006519556045532227,
+                  "name": "testOverflowAndMaximum()",
+                  "nodeIdentifier": "MoneyTests/testOverflowAndMaximum()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testOverflowAndMaximum",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.00075s",
+                  "durationInSeconds": 0.0007519721984863281,
+                  "name": "testRejectsAmbiguousPartialAndNonPositiveInput()",
+                  "nodeIdentifier": "MoneyTests/testRejectsAmbiguousPartialAndNonPositiveInput()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests/testRejectsAmbiguousPartialAndNonPositiveInput",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "MoneyTests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MoneyTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            },
+            {
+              "children": [
+                {
+                  "duration": "0.016s",
+                  "durationInSeconds": 0.0164949893951416,
+                  "name": "testCurrenciesAreNeverAddedTogether()",
+                  "nodeIdentifier": "MonthlySummaryTests/testCurrenciesAreNeverAddedTogether()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testCurrenciesAreNeverAddedTogether",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0024s",
+                  "durationInSeconds": 0.0023980140686035156,
+                  "name": "testDecimalTotalsAndDeterministicTies()",
+                  "nodeIdentifier": "MonthlySummaryTests/testDecimalTotalsAndDeterministicTies()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testDecimalTotalsAndDeterministicTies",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.002s",
+                  "durationInSeconds": 0.0019519329071044922,
+                  "name": "testDSTDoesNotSplitOneLocalExpenseDay()",
+                  "nodeIdentifier": "MonthlySummaryTests/testDSTDoesNotSplitOneLocalExpenseDay()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testDSTDoesNotSplitOneLocalExpenseDay",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.002s",
+                  "durationInSeconds": 0.002012014389038086,
+                  "name": "testEmptyAndIncomeOnlyMonthsDoNotDivideByZero()",
+                  "nodeIdentifier": "MonthlySummaryTests/testEmptyAndIncomeOnlyMonthsDoNotDivideByZero()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testEmptyAndIncomeOnlyMonthsDoNotDivideByZero",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0056s",
+                  "durationInSeconds": 0.005550026893615723,
+                  "name": "testLeapYearAndYearBoundary()",
+                  "nodeIdentifier": "MonthlySummaryTests/testLeapYearAndYearBoundary()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testLeapYearAndYearBoundary",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0033s",
+                  "durationInSeconds": 0.0032559633255004883,
+                  "name": "testMonthBoundariesUseLocalTimezoneAndExcludeEnd()",
+                  "nodeIdentifier": "MonthlySummaryTests/testMonthBoundariesUseLocalTimezoneAndExcludeEnd()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testMonthBoundariesUseLocalTimezoneAndExcludeEnd",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0017s",
+                  "durationInSeconds": 0.0016900300979614258,
+                  "name": "testTotalsCategoriesAndExpenseDays()",
+                  "nodeIdentifier": "MonthlySummaryTests/testTotalsCategoriesAndExpenseDays()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests/testTotalsCategoriesAndExpenseDays",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "MonthlySummaryTests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/MonthlySummaryTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            },
+            {
+              "children": [
+                {
+                  "duration": "0.036s",
+                  "durationInSeconds": 0.03601396083831787,
+                  "name": "testEditingPreservesIdentityAndCreationDateThenDeletionPersists()",
+                  "nodeIdentifier": "PersistenceTests/testEditingPreservesIdentityAndCreationDateThenDeletionPersists()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testEditingPreservesIdentityAndCreationDateThenDeletionPersists",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.12s",
+                  "durationInSeconds": 0.12366509437561035,
+                  "name": "testIntentWriteSurvivesReopeningAndFeedsAllSummaries()",
+                  "nodeIdentifier": "PersistenceTests/testIntentWriteSurvivesReopeningAndFeedsAllSummaries()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testIntentWriteSurvivesReopeningAndFeedsAllSummaries",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.019s",
+                  "durationInSeconds": 0.018559932708740234,
+                  "name": "testInvalidEditDoesNotAlterPreviouslySavedEntry()",
+                  "nodeIdentifier": "PersistenceTests/testInvalidEditDoesNotAlterPreviouslySavedEntry()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testInvalidEditDoesNotAlterPreviouslySavedEntry",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.012s",
+                  "durationInSeconds": 0.012467026710510254,
+                  "name": "testInvalidWritesDoNotCreateTransactions()",
+                  "nodeIdentifier": "PersistenceTests/testInvalidWritesDoNotCreateTransactions()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testInvalidWritesDoNotCreateTransactions",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.028s",
+                  "durationInSeconds": 0.027938008308410645,
+                  "name": "testSavedIncomeAndExpenseFeedMonthlyBalance()",
+                  "nodeIdentifier": "PersistenceTests/testSavedIncomeAndExpenseFeedMonthlyBalance()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testSavedIncomeAndExpenseFeedMonthlyBalance",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.024s",
+                  "durationInSeconds": 0.023844003677368164,
+                  "name": "testSeedingIsIdempotentAndFreshContextsSeeWrites()",
+                  "nodeIdentifier": "PersistenceTests/testSeedingIsIdempotentAndFreshContextsSeeWrites()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testSeedingIsIdempotentAndFreshContextsSeeWrites",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.05s",
+                  "durationInSeconds": 0.05018794536590576,
+                  "name": "testStorageErrorPropagatesInsteadOfFallingBackToMemory()",
+                  "nodeIdentifier": "PersistenceTests/testStorageErrorPropagatesInsteadOfFallingBackToMemory()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests/testStorageErrorPropagatesInsteadOfFallingBackToMemory",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "PersistenceTests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests/PersistenceTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            }
+          ],
+          "name": "MiDineroTests",
+          "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroTests",
+          "nodeType": "Unit test bundle",
+          "result": "Passed"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "duration": "56s",
+                  "durationInSeconds": 56.685022950172424,
+                  "name": "testRegisterReopenEditReportAndDelete()",
+                  "nodeIdentifier": "MiDineroUITests/testRegisterReopenEditReportAndDelete()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests/testRegisterReopenEditReportAndDelete",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "MiDineroUITests",
+              "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            }
+          ],
+          "name": "MiDineroUITests",
+          "nodeIdentifierURL": "test://com.apple.xcode/MiDinero/MiDineroUITests",
+          "nodeType": "UI test bundle",
+          "result": "Passed"
+        }
+      ],
+      "name": "MiDinero",
+      "nodeType": "Test Plan",
+      "result": "Passed"
+    }
+  ],
+  "testPlanConfigurations": [
+    {
+      "configurationId": "1",
+      "configurationName": "Test Scheme Action"
+    }
+  ]
+}

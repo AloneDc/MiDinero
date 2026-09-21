@@ -1,0 +1,14 @@
+{
+  "confirmation-popover.png": {
+    "original_attachment": "352B3269-7C82-450D-9E96-ED6DF7EED958.png",
+    "sha256": "6418d4763ecbfbd72243aadee851f5993c32af536bb8577c944265264d4a8133",
+    "run": "35661791709",
+    "physical_device": false
+  },
+  "empty-after-delete.png": {
+    "original_attachment": "707D685E-FE8A-4413-8571-56D2571D2078.png",
+    "sha256": "d68c7d209f9003bfa96509850635eb72c4ebf1160288fd020119dffe23be948f",
+    "run": "35661791709",
+    "physical_device": false
+  }
+}

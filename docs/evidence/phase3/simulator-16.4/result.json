@@ -1,0 +1,476 @@
+{
+  "status": "COMPILED_AND_TESTED",
+  "started_at": "2026-09-21T22:16:37.533123+00:00",
+  "host": "macOS-15.7.9-arm64-arm-64bit-Mach-O",
+  "commands": [
+    {
+      "name": "macos",
+      "argv": [
+        "sw_vers"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "architecture",
+      "argv": [
+        "uname",
+        "-m"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "developer-directory",
+      "argv": [
+        "xcode-select",
+        "-p"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "xcode-version",
+      "argv": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "swift-version",
+      "argv": [
+        "swift",
+        "--version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "sdk-version",
+      "argv": [
+        "xcrun",
+        "--sdk",
+        "iphonesimulator",
+        "--show-sdk-version"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "sdk-path",
+      "argv": [
+        "xcrun",
+        "--sdk",
+        "iphonesimulator",
+        "--show-sdk-path"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "sdks",
+      "argv": [
+        "xcodebuild",
+        "-showsdks"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "revision",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "targets-and-schemes",
+      "argv": [
+        "xcodebuild",
+        "-list",
+        "-project",
+        "MiDinero.xcodeproj"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "simulators",
+      "argv": [
+        "xcrun",
+        "simctl",
+        "list",
+        "--json"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "destinations",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-sdk",
+        "iphonesimulator",
+        "-showdestinations"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "simulator-boot",
+      "argv": [
+        "xcrun",
+        "simctl",
+        "boot",
+        "22A3039C-6A45-47F4-82D4-80C58CA94379"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "simulator-ready",
+      "argv": [
+        "xcrun",
+        "simctl",
+        "bootstatus",
+        "22A3039C-6A45-47F4-82D4-80C58CA94379",
+        "-b"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 300
+    },
+    {
+      "name": "destinations-after-boot",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-sdk",
+        "iphonesimulator",
+        "-showdestinations"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "build-settings",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Debug",
+        "-destination",
+        "platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64",
+        "-destination-timeout",
+        "120",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-showBuildSettings"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "build",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Debug",
+        "-destination",
+        "platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64",
+        "-destination-timeout",
+        "120",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Build.xcresult",
+        "build"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "build-for-testing",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Debug",
+        "-destination",
+        "platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64",
+        "-destination-timeout",
+        "120",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/BuildForTesting.xcresult",
+        "build-for-testing"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "enumerate-tests",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Debug",
+        "-destination",
+        "platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64",
+        "-destination-timeout",
+        "120",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "test-without-building",
+        "-enumerate-tests",
+        "-test-enumeration-style",
+        "flat",
+        "-test-enumeration-format",
+        "text",
+        "-test-enumeration-output-path",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/discovered-tests.txt"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "tests",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Debug",
+        "-destination",
+        "platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64",
+        "-destination-timeout",
+        "120",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-parallel-testing-enabled",
+        "NO",
+        "-maximum-concurrent-test-simulator-destinations",
+        "1",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Tests.xcresult",
+        "test-without-building"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 900
+    },
+    {
+      "name": "test-summary",
+      "argv": [
+        "xcrun",
+        "xcresulttool",
+        "get",
+        "test-results",
+        "summary",
+        "--path",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Tests.xcresult"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "test-details",
+      "argv": [
+        "xcrun",
+        "xcresulttool",
+        "get",
+        "test-results",
+        "tests",
+        "--path",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Tests.xcresult"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "test-attachments",
+      "argv": [
+        "xcrun",
+        "xcresulttool",
+        "export",
+        "attachments",
+        "--path",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Tests.xcresult",
+        "--output-path",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/attachments"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "release-build",
+      "argv": [
+        "xcodebuild",
+        "-project",
+        "MiDinero.xcodeproj",
+        "-scheme",
+        "MiDinero",
+        "-configuration",
+        "Release",
+        "-destination",
+        "generic/platform=iOS Simulator",
+        "-derivedDataPath",
+        "/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData",
+        "CODE_SIGNING_ALLOWED=NO",
+        "SWIFT_STRICT_CONCURRENCY=complete",
+        "-resultBundlePath",
+        "/Users/runner/work/MiDinero/MiDinero/build/ci-evidence/Release.xcresult",
+        "build"
+      ],
+      "exit_code": 0,
+      "timeout_seconds": 600
+    }
+  ],
+  "tests": {
+    "total": 26,
+    "executed": 26,
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "expected_failures": 0
+  },
+  "discovered_tests": [
+    "testCurrenciesAreNeverAddedTogether",
+    "testCurrencyScaleCanEvolve",
+    "testDSTDoesNotSplitOneLocalExpenseDay",
+    "testDecimalInputIsExactForBothKeyboards",
+    "testDecimalTotalsAndDeterministicTies",
+    "testEditingPreservesIdentityAndCreationDateThenDeletionPersists",
+    "testEditingRoundTripPreservesCents",
+    "testEmptyAndIncomeOnlyMonthsDoNotDivideByZero",
+    "testEmptyExportStillHasHeader",
+    "testFormattingHonorsLocaleAndCurrency",
+    "testIntentWriteSurvivesReopeningAndFeedsAllSummaries",
+    "testInvalidEditDoesNotAlterPreviouslySavedEntry",
+    "testInvalidWritesDoNotCreateTransactions",
+    "testLeapYearAndYearBoundary",
+    "testMonthBoundariesUseLocalTimezoneAndExcludeEnd",
+    "testNoteNormalizationAndLimit",
+    "testOverflowAndMaximum",
+    "testPerformWritesToTheContainerAndStoreReadByTheApp",
+    "testRegisterReopenEditReportAndDelete",
+    "testRejectsAmbiguousPartialAndNonPositiveInput",
+    "testSavedIncomeAndExpenseFeedMonthlyBalance",
+    "testSeedingIsIdempotentAndFreshContextsSeeWrites",
+    "testSpreadsheetFormulaInjectionIsNeutralized",
+    "testStorageErrorPropagatesInsteadOfFallingBackToMemory",
+    "testTotalsCategoriesAndExpenseDays",
+    "testUTF8EscapingExactAmountsAndUTC"
+  ],
+  "error": null,
+  "warnings": [
+    "2026-09-21 22:21:10.427 appintentsmetadataprocessor[13226:42032] warning: Metadata extraction skipped. No AppIntents.framework dependency found."
+  ],
+  "run_url": "https://github.com/AloneDc/MiDinero/actions/runs/35661791709",
+  "simulator": {
+    "dataPath": "/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data",
+    "dataPathSize": 18337792,
+    "logPath": "/Users/runner/Library/Logs/CoreSimulator/22A3039C-6A45-47F4-82D4-80C58CA94379",
+    "udid": "22A3039C-6A45-47F4-82D4-80C58CA94379",
+    "isAvailable": true,
+    "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
+    "state": "Shutdown",
+    "name": "iPhone SE (3rd generation)",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "runtimeVersion": "18.5"
+  },
+  "expected_source_tests": [
+    "testCurrenciesAreNeverAddedTogether",
+    "testCurrencyScaleCanEvolve",
+    "testDSTDoesNotSplitOneLocalExpenseDay",
+    "testDecimalInputIsExactForBothKeyboards",
+    "testDecimalTotalsAndDeterministicTies",
+    "testEditingPreservesIdentityAndCreationDateThenDeletionPersists",
+    "testEditingRoundTripPreservesCents",
+    "testEmptyAndIncomeOnlyMonthsDoNotDivideByZero",
+    "testEmptyExportStillHasHeader",
+    "testFormattingHonorsLocaleAndCurrency",
+    "testIntentWriteSurvivesReopeningAndFeedsAllSummaries",
+    "testInvalidEditDoesNotAlterPreviouslySavedEntry",
+    "testInvalidWritesDoNotCreateTransactions",
+    "testLeapYearAndYearBoundary",
+    "testMonthBoundariesUseLocalTimezoneAndExcludeEnd",
+    "testNoteNormalizationAndLimit",
+    "testOverflowAndMaximum",
+    "testPerformWritesToTheContainerAndStoreReadByTheApp",
+    "testRegisterReopenEditReportAndDelete",
+    "testRejectsAmbiguousPartialAndNonPositiveInput",
+    "testSavedIncomeAndExpenseFeedMonthlyBalance",
+    "testSeedingIsIdempotentAndFreshContextsSeeWrites",
+    "testSpreadsheetFormulaInjectionIsNeutralized",
+    "testStorageErrorPropagatesInsteadOfFallingBackToMemory",
+    "testTotalsCategoriesAndExpenseDays",
+    "testUTF8EscapingExactAmountsAndUTC"
+  ],
+  "compiler_error_lines": [],
+  "runtime_error_lines": [
+    "2026-09-21 22:21:54.445366+0000 MiDinero[13997:44627] [Metadata] Failed to refresh AppShortcut parameters with error: Error Domain=NSOSStatusErrorDomain Code=-10814 \"(null)\" UserInfo={_LSLine=163, NSUnderlyingError=0x600000c17570 {Error Domain=NSOSStatusErrorDomain Code=-10814 \"Unable to find this application extension record in the Launch Services database.\" UserInfo={_LSFunction=_LSPluginFindWithPlatformInfo, _LSLine=691, NSDebugDescription=Unable to find this application extension record in the Launch Services database., SK=MiDinero, IS=false}}, _LSFunction=+[LSBundleRecord bundleRecordWithBundleIdentifier:allowPlaceholder:error:]}",
+    "2026-09-21 22:22:07.964874+0000 MiDinero[14515:46305] [Metadata] Failed to refresh AppShortcut parameters with error: Error Domain=NSOSStatusErrorDomain Code=-10814 \"(null)\" UserInfo={_LSLine=163, NSUnderlyingError=0x600000c23000 {Error Domain=NSOSStatusErrorDomain Code=-10814 \"Unable to find this application extension record in the Launch Services database.\" UserInfo={_LSFunction=_LSPluginFindWithPlatformInfo, _LSLine=691, NSDebugDescription=Unable to find this application extension record in the Launch Services database., SK=MiDinero, IS=false}}, _LSFunction=+[LSBundleRecord bundleRecordWithBundleIdentifier:allowPlaceholder:error:]}",
+    "2026-09-21 22:22:11.036734+0000 MiDinero[14515:46048] [error] CoreData: error: Failed to stat path '/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store', errno 20 / Not a directory.",
+    "2026-09-21 22:22:11.037498+0000 MiDinero[14515:46048] [error] CoreData: error: Executing as effective user 501",
+    "2026-09-21 22:22:11.037598+0000 MiDinero[14515:46048] [error] CoreData: error: Failed to statfs file; errno 20 / Not a directory.",
+    "2026-09-21 22:22:11.040017+0000 MiDinero[14515:46048] [error] CoreData: error: addPersistentStoreWithType:configuration:URL:options:error: returned error NSCocoaErrorDomain (258)",
+    "2026-09-21 22:22:11.045524+0000 MiDinero[14515:46048] [error] CoreData: error: userInfo:",
+    "2026-09-21 22:22:11.045648+0000 MiDinero[14515:46048] [error] CoreData: error: \tNSFilePath : /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store",
+    "2026-09-21 22:22:11.045732+0000 MiDinero[14515:46048] [error] CoreData: error: \treason : Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory",
+    "2026-09-21 22:22:11.047210+0000 MiDinero[14515:46048] [error] CoreData: error: storeType: SQLite",
+    "2026-09-21 22:22:11.047336+0000 MiDinero[14515:46048] [error] CoreData: error: configuration: MiDinero",
+    "2026-09-21 22:22:11.047429+0000 MiDinero[14515:46048] [error] CoreData: error: URL: file:///Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store",
+    "2026-09-21 22:22:11.053384+0000 MiDinero[14515:46048] [error] CoreData: error: <NSPersistentStoreCoordinator: 0x60000294ba30>: Attempting recovery from error encountered during addPersistentStore: 0x600000cd1020 Error Domain=NSCocoaErrorDomain Code=258 \"No se ha podido abrir el ítem porque el nombre del archivo “store” no es válido.\" UserInfo={NSFilePath=/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store, reason=Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory}",
+    "2026-09-21 22:22:11.054728+0000 MiDinero[14515:46048] [error] CoreData: error: Store failed to load.  <NSPersistentStoreDescription: 0x600000cd1920> (type: SQLite, url: file:///Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store) with error = Error Domain=NSCocoaErrorDomain Code=258 \"No se ha podido abrir el ítem porque el nombre del archivo “store” no es válido.\" UserInfo={NSFilePath=/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store, reason=Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory} with userInfo {",
+    "CoreData: error: \tNSFilePath : /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store",
+    "CoreData: error: \treason : Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory",
+    "CoreData: error: <NSPersistentStoreCoordinator: 0x60000294ba30>: Attempting recovery from error encountered during addPersistentStore: 0x600000cd1020 Error Domain=NSCocoaErrorDomain Code=258 \"No se ha podido abrir el ítem porque el nombre del archivo “store” no es válido.\" UserInfo={NSFilePath=/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store, reason=Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory}",
+    "CoreData: error: Executing as effective user 501",
+    "CoreData: error: Failed to stat path '/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store', errno 20 / Not a directory.",
+    "CoreData: error: Failed to statfs file; errno 20 / Not a directory.",
+    "CoreData: error: Store failed to load.  <NSPersistentStoreDescription: 0x600000cd1920> (type: SQLite, url: file:///Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store) with error = Error Domain=NSCocoaErrorDomain Code=258 \"No se ha podido abrir el ítem porque el nombre del archivo “store” no es válido.\" UserInfo={NSFilePath=/Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store, reason=Component of path /Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store is not a directory} with userInfo {",
+    "CoreData: error: URL: file:///Users/runner/Library/Developer/CoreSimulator/Devices/22A3039C-6A45-47F4-82D4-80C58CA94379/data/Containers/Data/Application/A2DC50AE-C9C0-49BB-B151-B9A9CD27402C/tmp/16312046-78D8-4FC7-8CB5-5923F430F021/store",
+    "CoreData: error: addPersistentStoreWithType:configuration:URL:options:error: returned error NSCocoaErrorDomain (258)",
+    "CoreData: error: configuration: MiDinero",
+    "CoreData: error: storeType: SQLite",
+    "CoreData: error: userInfo:"
+  ],
+  "finished_at": "2026-09-21T22:24:26.316843+00:00"
+}

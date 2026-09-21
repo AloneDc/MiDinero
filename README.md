@@ -4,15 +4,16 @@ Finanzas personales para iPhone: registrar un gasto en segundos, desde la app o
 Atajos, y verlo en el historial y el reporte mensual. SwiftUI, SwiftData, App Intents
 y Charts; sin cuentas, backend, sincronización ni dependencias externas de ejecución.
 
-**Estado:** Debug y Release compilados con Xcode 16.4; 26 pruebas descubiertas,
-ejecutadas y aprobadas en iOS Simulator 18.5.
-[Ejecución aprobada](https://github.com/AloneDc/MiDinero/actions/runs/35658862995).
-Resultados reales y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-2--validación-xcode).
+**Estado:** Debug y Release compilados con Xcode 16.4 y 26.2; 26/26 pruebas
+aprobadas en cada Simulator (iOS 18.5 y 26.2). Release para iPhone y archive arm64
+sin firma también validados con SDK 26.2. Firma, TestFlight y prueba física pendientes.
+[CI aprobada](https://github.com/AloneDc/MiDinero/actions/runs/35661791709).
+Resultados y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-3--device-readiness).
 
 Preparación para dispositivo y distribución: [DEVICE_READINESS.md](docs/DEVICE_READINESS.md).
 Próxima validación manual: [plan de prueba en iPhone](docs/IPHONE_TEST_PLAN.md).
 TestFlight exige Xcode 26+/SDK iOS 26+; el mínimo para ejecutar sigue siendo iOS 17.
-El workflow separado de distribución es manual y requiere firma real; no se ha activado.
+El workflow separado de distribución es manual y requiere firma real; no se ha ejecutado.
 
 ## Abrir y ejecutar
 
