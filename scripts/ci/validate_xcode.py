@@ -21,7 +21,8 @@ DERIVED = ROOT / "build/CI-DerivedData"
 
 
 class Validation:
-    def __init__(self) -> None:
+    def __init__(self, evidence: Path = EVIDENCE) -> None:
+        self.evidence = evidence
         self.result = {
             "status": "NOT_EXECUTED_ON_MACOS", "started_at": datetime.now(timezone.utc).isoformat(),
             "host": platform.platform(), "commands": [], "tests": None, "discovered_tests": None,
@@ -36,7 +37,7 @@ class Validation:
         self.result["commands"].append(entry)
         self.save()  # Preserve discovery and the active command even if the runner is cancelled.
         chunks = []
-        with (EVIDENCE / f"{name}.log").open("w", encoding="utf-8") as log:
+        with (self.evidence / f"{name}.log").open("w", encoding="utf-8") as log:
             process = subprocess.Popen(args, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                        text=True, encoding="utf-8", errors="replace", start_new_session=True)
             def terminate() -> None:
@@ -64,12 +65,12 @@ class Validation:
         return "".join(chunks)
 
     def save(self) -> None:
-        (EVIDENCE / "result.json").write_text(json.dumps(self.result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        (self.evidence / "result.json").write_text(json.dumps(self.result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     def json_command(self, name: str, args: list[str], *, required: bool = True) -> dict:
         raw = self.command(name, args, required=required)
         value = json.loads(raw)
-        (EVIDENCE / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
+        (self.evidence / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
         return value
 
     def execute(self) -> None:

@@ -75,6 +75,7 @@ def generate() -> dict[str, str]:
                 "SWIFT_STRICT_CONCURRENCY": "complete", "IPHONEOS_DEPLOYMENT_TARGET": "17.0",
                 "OTHER_SWIFT_FLAGS": "$(inherited) -enable-upcoming-feature InferSendableFromCaptures",
                 "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator", "SUPPORTS_MACCATALYST": "NO",
+                "SKIP_INSTALL": "NO" if is_app else "YES",
                 "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
             }
             if is_app:
