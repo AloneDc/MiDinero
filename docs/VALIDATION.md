@@ -18,7 +18,7 @@ git diff --check
 El parser es una herramienta de desarrollo opcional, aislada e ignorada por Git.
 No hay paquetes externos en el proyecto iOS ni en `Package.swift`.
 
-## Primera ejecución en Mac
+## Pipeline real en Mac y GitHub Actions
 
 ```bash
 xcode-select -p
@@ -26,32 +26,32 @@ xcodebuild -version
 xcrun swift --version
 open MiDinero.xcodeproj
 bash scripts/validate_mac.sh
-# Selecci?n opcional: SIMULATOR_ID=<UUID> bash scripts/validate_mac.sh
+# Selección opcional: SIMULATOR_ID=<UUID> bash scripts/validate_mac.sh
 ```
 
 Necesita Xcode 16+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
 El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`:
 
-1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisi?n y targets/schemes.
+1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisión y targets/schemes.
 2. Detecta dispositivos con `simctl` y destinos con `xcodebuild -showdestinations`.
-   Si el runner inicialmente solo anuncia destinos gen?ricos, elige un iPhone
-   instalado del SDK detectado, lo arranca y Xcode resuelve su UUID expl?cito.
+   Prioriza un iPhone instalado del SDK detectado, lo arranca y Xcode resuelve
+   su UUID explícito, aunque inicialmente solo anuncie destinos genéricos.
 3. Compila Debug y `build-for-testing`, sin signing para Simulator.
 4. Enumera con `test-without-building -enumerate-tests`, ejecuta todas las pruebas
    con `test-without-building` y lee resultados reales mediante `xcresulttool`.
-   El inventario esperado es 25 pruebas unitarias/integraci?n y 1 de UI. No se
+   El inventario esperado es 25 pruebas unitarias/integración y 1 de UI. No se
    acepta un resultado verde con pruebas ausentes, omitidas o no ejecutadas.
-5. Compila Release para Simulator y conserva todos los diagn?sticos.
+5. Compila Release para Simulator y conserva todos los diagnósticos.
 
-Los artefactos `xcode-evidence-<run>-<attempt>` conservan durante 14 d?as logs,
-comandos y c?digos de salida en `result.json`, inventario descubierto, res?menes
+Los artefactos `xcode-evidence-<run>-<attempt>` conservan durante 14 días logs,
+comandos y códigos de salida en `result.json`, inventario descubierto, resúmenes
 JSON y bundles `.xcresult`. El directorio local `build/ci-evidence/` no se
-sobrescribe: mu?velo antes de repetir. Las cinco pruebas Python del parser de
+sobrescribe: muévelo antes de repetir. Las cinco pruebas Python del parser de
 CI son complementarias; no se suman al conteo de XCTest/XCUITest.
 
 `swift test` ejecuta por separado las 17 pruebas Foundation. No sustituye los
 25 tests del target alojado en la app ni XCUITest. El scheme compartido inyecta
-`MIDINERO_UI_TEST_STORE` ?nicamente para tests; Launch normal no lo hereda.
+`MIDINERO_UI_TEST_STORE` únicamente para tests; Launch normal no lo hereda.
 La prueba UI usa un UUID nuevo y lo conserva para su reapertura.
 
 Revisar warnings de concurrencia con `SWIFT_STRICT_CONCURRENCY=complete`, expansión
@@ -113,6 +113,7 @@ Con la app firmada e instalada y Siri en español:
 9. Probar el paso de descripción de [APP_INTENTS.md](APP_INTENTS.md) y documentar
    la UX real de esa versión de iOS. Comprobar también locale es_PE y uno con coma decimal.
 
-Las pruebas `ExpenseIntentWriter` comprueban el servicio de escritura y reapertura,
-**no** el sistema de resolución, permisos, extracción de metadata ni la ejecución
-de `perform()` a través del runtime de Shortcuts. No se ha simulado ese resultado.
+Las pruebas `ExpenseIntentWriter` comprueban escritura y reapertura.
+`AppIntentTests` también llama a `perform()` y verifica el almacén usado por la app.
+Xcode procesa la metadata al compilar. Estas comprobaciones no ejecutan resolución,
+autenticación ni `perform()` a través del runtime de Shortcuts/Siri.

@@ -4,9 +4,9 @@ Finanzas personales para iPhone: registrar un gasto en segundos, desde la app o
 Atajos, y verlo en el historial y el reporte mensual. SwiftUI, SwiftData, App Intents
 y Charts; sin cuentas, backend, sincronización ni dependencias externas de ejecución.
 
-**Estado:** vertical slice implementado. Se verificó estructura y gramática en Windows;
-**no se ha compilado ni ejecutado en iOS**. La evidencia y los límites están en
-[ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md).
+**Estado:** vertical slice implementado, con validación Xcode automatizada en
+[GitHub Actions](https://github.com/AloneDc/MiDinero/actions/workflows/ios-ci.yml).
+Resultados reales y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-2--validación-xcode).
 
 ## Abrir y ejecutar
 
@@ -102,13 +102,13 @@ XCTest/XCUITest con `.xcresult` y compila Release. Conserva comandos, logs y
 resultados en `build/ci-evidence/`; mueve ese directorio antes de repetir localmente.
 Los scripts auxiliares usan Python 3.10 o posterior; abrir/compilar desde Xcode no lo requiere.
 Las siete pruebas de persistencia usan almacenes temporales o en memoria.
-Otra prueba invoca `perform()` directamente y comprueba el contenedor com?n, la
+Otra prueba invoca `perform()` directamente y comprueba el contenedor común, la
 lectura desde `LedgerStore` y la reapertura del archivo. El scheme de tests usa un
 directorio separado; la prueba falla si falta su variable de aislamiento. La prueba
 UI usa un directorio con UUID independiente de los datos personales y comprueba
 registro, reapertura, edición, reporte, cancelación de borrado y eliminación.
 
-Invocar `perform()` en XCTest no sustituye la resoluci?n y ejecuci?n de Siri/Atajos reales.
+Invocar `perform()` en XCTest no sustituye la resolución y ejecución de Siri/Atajos reales.
 La [matriz de validación en Mac/iPhone](docs/VALIDATION.md) cubre esa diferencia.
 
 Comprobaciones disponibles también en Windows:

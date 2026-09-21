@@ -44,70 +44,11 @@ struct TransactionEditorView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("¿Cuánto?").font(.title2.weight(.semibold))
-                        HStack(alignment: .firstTextBaseline) {
-                            Text(currency.code == "PEN" ? "S/" : currency.code).foregroundStyle(.secondary)
-                            TextField("0.00", text: $amount)
-                                .keyboardType(.decimalPad)
-                                .focused($amountFocused)
-                                .accessibilityLabel("Monto en \(currency.code)")
-                                .accessibilityIdentifier("amountField")
-                        }
-                        .font(.largeTitle.weight(.semibold)).monospacedDigit()
-                        Text("\(currency.code) · hasta \(currency.fractionDigits) decimales")
-                            .font(.footnote).foregroundStyle(.secondary)
-                    }
+                    amountSection
                     if showDetails {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("¿En qué categoría?").font(.headline)
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 240 : 140), spacing: 10)], spacing: 10) {
-                                ForEach(store.categories) { category in
-                                    Button {
-                                        categoryID = category.id
-                                        amountFocused = false
-                                    } label: {
-                                        HStack(spacing: 8) {
-                                            Image(systemName: category.symbol).frame(width: 22)
-                                            Text(category.name).multilineTextAlignment(.leading)
-                                            Spacer(minLength: 0)
-                                            if categoryID == category.id { Image(systemName: "checkmark") }
-                                        }
-                                        .font(.subheadline.weight(.medium))
-                                        .padding(.horizontal, 10).padding(.vertical, 12)
-                                        .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
-                                        .background(categoryID == category.id ? Color.indigo.opacity(0.12) : Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .strokeBorder(categoryID == category.id ? Color.indigo : Color.clear, lineWidth: 1.5)
-                                        }
-                                    }
-                                    .buttonStyle(.plain)
-                                    .accessibilityAddTraits(categoryID == category.id ? .isSelected : [])
-                                    .accessibilityIdentifier("category.\(category.id)")
-                                }
-                            }
-                        }
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Descripción (opcional)").font(.headline)
-                            TextField("Por ejemplo, almuerzo con amigos", text: $note, axis: .vertical)
-                                .lineLimit(2...4).textFieldStyle(.roundedBorder)
-                                .accessibilityIdentifier("noteField")
-                            if note.count > 500 {
-                                Text("Usa hasta 500 caracteres.").font(.footnote).foregroundStyle(.red)
-                            }
-                        }
-                        DisclosureGroup("Tipo y fecha") {
-                            VStack(alignment: .leading, spacing: 16) {
-                                Picker("Tipo de movimiento", selection: $type) {
-                                    ForEach(TransactionType.allCases) { Text($0.title).tag($0) }
-                                }
-                                .pickerStyle(.segmented)
-                                DatePicker("Fecha", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                            }
-                            .padding(.top, 12)
-                        }
-                        .font(.subheadline)
+                        categorySection
+                        noteSection
+                        typeAndDateSection
                     }
                     if let error {
                         Label(error, systemImage: "exclamationmark.circle")
@@ -132,7 +73,9 @@ struct TransactionEditorView: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                Button(action: showDetails ? save : advance) {
+                Button {
+                    if showDetails { save() } else { advance() }
+                } label: {
                     Text(showDetails ? (record == nil ? "Guardar \(type.title.lowercased())" : "Guardar cambios") : "Continuar")
                         .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 8)
                 }
@@ -155,6 +98,84 @@ struct TransactionEditorView: View {
             }
             .task { amountFocused = record == nil }
         }
+    }
+
+    private var amountSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("¿Cuánto?").font(.title2.weight(.semibold))
+            HStack(alignment: .firstTextBaseline) {
+                Text(currency.code == "PEN" ? "S/" : currency.code).foregroundStyle(.secondary)
+                TextField("0.00", text: $amount)
+                    .keyboardType(.decimalPad)
+                    .focused($amountFocused)
+                    .accessibilityLabel("Monto en \(currency.code)")
+                    .accessibilityIdentifier("amountField")
+            }
+            .font(.largeTitle.weight(.semibold)).monospacedDigit()
+            Text("\(currency.code) · hasta \(currency.fractionDigits) decimales")
+                .font(.footnote).foregroundStyle(.secondary)
+        }
+    }
+
+    private var categorySection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("¿En qué categoría?").font(.headline)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 240 : 140), spacing: 10)], spacing: 10) {
+                ForEach(store.categories) { category in categoryButton(category) }
+            }
+        }
+    }
+
+    private func categoryButton(_ category: CategoryInfo) -> some View {
+        let selected = categoryID == category.id
+        return Button {
+            categoryID = category.id
+            amountFocused = false
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: category.symbol).frame(width: 22)
+                Text(category.name).multilineTextAlignment(.leading)
+                Spacer(minLength: 0)
+                if selected { Image(systemName: "checkmark") }
+            }
+            .font(.subheadline.weight(.medium))
+            .padding(.horizontal, 10).padding(.vertical, 12)
+            .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
+            .background(selected ? Color.indigo.opacity(0.12) : Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(selected ? Color.indigo : Color.clear, lineWidth: 1.5)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("category.\(category.id)")
+    }
+
+    private var noteSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Descripción (opcional)").font(.headline)
+            TextField("Por ejemplo, almuerzo con amigos", text: $note, axis: .vertical)
+                .lineLimit(2...4).textFieldStyle(.roundedBorder)
+                .accessibilityIdentifier("noteField")
+            if note.count > 500 {
+                Text("Usa hasta 500 caracteres.").font(.footnote).foregroundStyle(.red)
+            }
+        }
+    }
+
+    private var typeAndDateSection: some View {
+        DisclosureGroup("Tipo y fecha") {
+            VStack(alignment: .leading, spacing: 16) {
+                Picker("Tipo de movimiento", selection: $type) {
+                    ForEach(TransactionType.allCases) { Text($0.title).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                DatePicker("Fecha", selection: $date, displayedComponents: [.date, .hourAndMinute])
+            }
+            .padding(.top, 12)
+        }
+        .font(.subheadline)
     }
 
     private func advance() {

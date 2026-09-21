@@ -1,8 +1,9 @@
 # Evidencia de ejecución del agente
 
-Fecha de la sesión: 21 de septiembre de 2026. Este documento distingue código
-implementado, validación estática realizada y comportamiento pendiente de ejecutar.
-No constituye una certificación de compilación o funcionamiento en iOS.
+Fecha de la sesión: 21 de septiembre de 2026. Las secciones iniciales conservan
+el registro histórico de la **fase 1 realizada en Windows**. Los resultados
+posteriores de macOS/Xcode están en **Fase 2 — Validación Xcode**, al final del
+documento; sustituyen los pendientes de compilación de la fase 1.
 
 ## Entorno detectado
 

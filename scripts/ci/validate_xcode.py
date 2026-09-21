@@ -34,6 +34,7 @@ class Validation:
         print(f"\n$ {shlex.join(args)}", flush=True)
         entry = {"name": name, "argv": args, "exit_code": None, "timeout_seconds": timeout}
         self.result["commands"].append(entry)
+        self.save()  # Preserve discovery and the active command even if the runner is cancelled.
         chunks = []
         with (EVIDENCE / f"{name}.log").open("w", encoding="utf-8") as log:
             process = subprocess.Popen(args, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -98,7 +99,7 @@ class Validation:
         self.command("simulator-ready", ["xcrun", "simctl", "bootstatus", device["udid"], "-b"], timeout=300)
         self.command("destinations-after-boot", base + ["-sdk", "iphonesimulator", "-showdestinations"])
         self.command("build-settings", base + ["-sdk", "iphonesimulator", "-showBuildSettings"])
-        options = ["-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device['udid']}",
+        options = ["-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device['udid']},arch={platform.machine()}",
                    "-destination-timeout", "120", "-derivedDataPath", str(DERIVED),
                    "CODE_SIGNING_ALLOWED=NO", "SWIFT_STRICT_CONCURRENCY=complete"]
         self.result["status"] = "BUILD_FAILED"
@@ -138,14 +139,19 @@ class Validation:
         # Preserve SDK diagnostics without suppressing concurrency warnings.
         warnings = set()
         errors = set()
+        runtime_errors = set()
         for log in EVIDENCE.glob("*.log"):
             for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
                 if re.search(r"\bwarning:", line, re.I):
                     warnings.add(line)
                 if re.search(r"\berror:", line, re.I):
-                    errors.add(line)
+                    if log.stem in ("build", "build-for-testing", "release-build"):
+                        errors.add(line)
+                    else:
+                        runtime_errors.add(line)
         self.result["warnings"] = sorted(warnings)
         self.result["compiler_error_lines"] = sorted(errors)
+        self.result["runtime_error_lines"] = sorted(runtime_errors)
         self.result["finished_at"] = datetime.now(timezone.utc).isoformat()
         self.save()
         report = ["# Xcode validation", "", f"Status: **{self.result['status']}**", "",
