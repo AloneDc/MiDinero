@@ -30,7 +30,8 @@ bash scripts/validate_mac.sh
 ```
 
 Necesita Xcode 16+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
-El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`:
+El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`,
+en una matriz explícita Xcode 16.4 / 26.2:
 
 1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisión y targets/schemes.
 2. Detecta dispositivos con `simctl` y destinos con `xcodebuild -showdestinations`.
@@ -43,11 +44,29 @@ El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`:
    acepta un resultado verde con pruebas ausentes, omitidas o no ejecutadas.
 5. Compila Release para Simulator y conserva todos los diagnósticos.
 
-Los artefactos `xcode-evidence-<run>-<attempt>` conservan durante 14 días logs,
+Los artefactos `xcode-evidence-<xcode>-<run>-<attempt>` conservan durante 14 días logs,
 comandos y códigos de salida en `result.json`, inventario descubierto, resúmenes
 JSON y bundles `.xcresult`. El directorio local `build/ci-evidence/` no se
-sobrescribe: muévelo antes de repetir. Las cinco pruebas Python del parser de
-CI son complementarias; no se suman al conteo de XCTest/XCUITest.
+sobrescribe: muévelo antes de repetir. Las seis pruebas Python (cinco del parser y
+una del bloqueo de distribución sin credenciales) son complementarias; no se suman
+al conteo de XCTest/XCUITest.
+
+Un job independiente usa Xcode 26.2 para `generic/platform=iOS`: Release build,
+archive sin firma, validación estructural (arm64, SDK, Info.plist, icono, privacidad,
+App Intents, frameworks y dSYM) y empaquetado del xcarchive. Reproducir en Mac:
+
+```bash
+export DEVELOPER_DIR=/Applications/Xcode_26.2.app/Contents/Developer
+python3 scripts/ci/validate_device.py
+```
+
+Los comandos y resultados están en `build/device-evidence/result.json`; el artefacto
+`device-evidence-<run>-<attempt>` incluye logs, metadata generada y archive `.tar.gz`
+sin firma durante 14 días. Mover los directorios `build/device-evidence/` y
+`build/device/MiDinero.xcarchive` antes de repetir. No es una IPA instalable.
+La firma/TestFlight y su workflow futuro se describen en
+[DEVICE_READINESS.md](DEVICE_READINESS.md); los pasos físicos en
+[IPHONE_TEST_PLAN.md](IPHONE_TEST_PLAN.md).
 
 `swift test` ejecuta por separado las 17 pruebas Foundation. No sustituye los
 25 tests del target alojado en la app ni XCUITest. El scheme compartido inyecta

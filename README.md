@@ -9,6 +9,11 @@ ejecutadas y aprobadas en iOS Simulator 18.5.
 [Ejecución aprobada](https://github.com/AloneDc/MiDinero/actions/runs/35658862995).
 Resultados reales y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-2--validación-xcode).
 
+Preparación para dispositivo y distribución: [DEVICE_READINESS.md](docs/DEVICE_READINESS.md).
+Próxima validación manual: [plan de prueba en iPhone](docs/IPHONE_TEST_PLAN.md).
+TestFlight exige Xcode 26+/SDK iOS 26+; el mínimo para ejecutar sigue siendo iOS 17.
+El workflow separado de distribución es manual y requiere firma real; no se ha activado.
+
 ## Abrir y ejecutar
 
 - Mac con Xcode 16 o posterior para el pipeline de evidencia; Simulator iOS 17 o posterior.

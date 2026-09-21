@@ -353,3 +353,129 @@ Launch Services observado en Simulator. No se declara aprobado ese recorrido del
 COMPILED_AND_TESTED
 
 Dos ejecuciones completas aprobadas; la última corresponde a `eeeb4b0`.
+
+## Fase 3 — Device Readiness
+
+### Alcance y entorno
+
+Preparación para dispositivo y distribución, sin funcionalidades, pantallas ni
+cambios de dominio/UI. Entorno local: Windows, sin Xcode ni iPhone. Se reutilizó
+el acceso autorizado a `AloneDc/MiDinero` para push y GitHub Actions en macOS 15.
+No se crearon certificados, cuentas Apple ni secretos; no se instaló en un teléfono.
+
+### Cambios y decisiones autónomas
+
+- Auditoría completa en [DEVICE_READINESS.md](DEVICE_READINESS.md): bundle/versiones,
+  mínimo iOS, signing, capabilities, metadata, almacenamiento, icono, orientación,
+  familia, frameworks, tests, privacidad y distribución.
+- `SKIP_INSTALL=NO` explícito en la app y `YES` en los tests, mantenidos en el
+  generador y el proyecto. El scheme ya archivaba únicamente la app.
+- `ITSAppUsesNonExemptEncryption=false`: el producto no implementa cifrado propio
+  ni usa SDKs criptográficos; no se desactiva la protección del dispositivo.
+- iOS 17 sigue siendo el mínimo. Xcode 26.2/SDK 26.2 para device archive y futura
+  distribución, porque los requisitos actuales de ASC superan el Xcode 16.4 de
+  fase 2. La matriz conserva también la validación de Xcode 16.4.
+- Se añadieron comprobaciones de archive reales y un workflow TestFlight separado,
+  manual y bloqueado sin configuración. Estrategia p12 + perfil App Store + clave
+  de equipo ASC, keychain efímero y limpieza; no depende de Fastlane.
+- `.gitignore` ampliado, comprobación de blobs del índice para nombres privados y
+  claves/tokens conocidos. Es una protección adicional, no garantía universal.
+- [IPHONE_TEST_PLAN.md](IPHONE_TEST_PLAN.md) documenta altas S/ 10 Comida y S/ 15
+  Transporte, deltas/porcentajes, cierre, Siri, background, app terminada y reinicio.
+  Todas las pruebas físicas siguen sin marcar.
+
+### Signing y entitlements actuales
+
+Proyecto: `CODE_SIGN_STYLE=Automatic`, sin `DEVELOPMENT_TEAM`, perfil ni identidad
+configurados. Bundle `com.eduardo.MiDinero`, versión `0.1.0`, build `1`.
+Ningún entitlement personalizado ni extensión. No se añadieron App Groups,
+iCloud, SiriKit ni modos de background. El archive sin firma registra identidad
+y Team vacíos; no contiene perfil ni `_CodeSignature`.
+
+Development requiere Mac/Xcode compatible, Apple Account/Team, bundle ID disponible,
+certificado Apple Development y perfil con el dispositivo (Xcode puede gestionarlos),
+iPhone emparejado y Developer Mode. Personal Team sirve para prueba personal con
+caducidad; no permite TestFlight. No se requieren certificados de distribución para
+la primera instalación desde Xcode.
+
+TestFlight requiere membresía Developer Program, App ID y app ASC con ID coincidente,
+certificado Apple Distribution **con clave privada**, perfil App Store válido,
+clave API de equipo para el workflow, build nuevo, procesamiento Apple y asignación
+de tester. Lista exacta de variables/secrets, instrucciones y fuentes oficiales en
+[DEVICE_READINESS.md](DEVICE_READINESS.md#b-distribuir-por-testflight).
+
+### App Intents y persistencia física
+
+La metadata generada por Xcode 26.2 dentro del archive confirma
+`RegisterExpenseIntent`, `isDiscoverable=true`, `openAppWhenRun=false`, monto y
+categoría obligatorios, descripción opcional, provider y dos frases con nombre
+de app. Esto prueba extracción/empaquetado, no indexación en el iPhone.
+
+App e intent llaman a `PersistenceController.shared.container()` en el mismo target.
+URL resuelta por FileManager: `<sandbox>/Library/Application Support/MiDinero/MiDinero.store`;
+configuración `MiDinero`, schema FinancialTransaction/Category, URL explícita,
+CloudKit deshabilitado. Contextos nuevos, MainActor, save explícito y recarga al
+activar escena. No hace falta App Group. Los tests usan otra carpeta solo en Debug.
+La carpeta financiera está excluida de backup; cambiar ID/desinstalar no migra datos.
+
+El comportamiento físico esperado y los límites de Siri, resolución de monto,
+nota opcional, autenticación y ejecución en segundo plano están documentados.
+El diagnóstico Launch Services de Simulator no se ha ocultado ni se considera
+resuelto por la compilación del archive.
+
+### Validación de esta fase
+
+Primera ejecución: [35660821233](https://github.com/AloneDc/MiDinero/actions/runs/35660821233),
+revisión `3e7a1d8fd8b25c5ceb8f4a3771b85554ed3eabf4`.
+El job de dispositivo completó Release build y archive con códigos 0 en macOS
+15.7.9, Xcode 26.2 (17C52), SDK iPhoneOS 26.2. Archivo arm64, mínimo 17.0,
+Info.plist/icono/privacy manifest/metadata presentes, frameworks SwiftData,
+AppIntents, Charts y SwiftUI enlazados, UUID del dSYM coincidente. Sin warnings.
+`codesign -dvv` devolvió 1: resultado esperado que confirma falta de firma.
+No se intentó exportar ni subir ese archive sin firma.
+
+Comandos locales realizados:
+
+```text
+python scripts/generate_project.py
+python scripts/verify_static.py --parse-swift --parse-project
+python -m unittest discover -s scripts/ci -p 'test_*.py' -v
+python -m py_compile scripts/ci/validate_device.py scripts/ci/distribute_testflight.py
+.validation-tools/actionlint.exe .github/workflows/ios-ci.yml .github/workflows/ios-testflight.yml
+python scripts/check_repository_security.py
+git diff --check
+```
+
+75 comprobaciones estructurales, 96 objetos PBX resueltos, 28 archivos Swift con
+gramática válida, seis tests Python aprobados. Actionlint y py_compile sin errores.
+La prueba de seguridad usa entorno vacío: no crea credenciales ficticias ni ejecuta
+comandos Apple. Diez rutas de prueba de `.gitignore` quedaron excluidas; no se
+crearon esos archivos. Revisión adicional de 95 blobs históricos: sin patrones de
+claves/tokens configurados. No sustituye un análisis exhaustivo de todos los secretos
+posibles. Diff revisado antes de publicar; sin código Swift de producto modificado.
+
+### Límites y pendientes
+
+No se ha demostrado firma, exportación IPA, upload, aceptación/procesamiento de ASC,
+instalación física ni ejecución del intent desde Atajos/Siri del sistema. El workflow
+de distribución solo tiene validación estática y del bloqueo sin credenciales.
+No se han configurado `TESTFLIGHT_ENABLED`, environment de distribución, secretos
+Apple ni protección de ese environment. No hay prueba en runtime iOS 17 físico.
+
+El siguiente paso operativo es seleccionar Team en Xcode e instalar en el iPhone,
+siguiendo el plan. Si no se dispone de Mac, preparar los recursos de Developer
+Program/ASC y los secrets del workflow permite la vía TestFlight. No se puede
+garantizar que la prueba física no descubra un problema todavía no observable.
+
+### Archivos principales de la fase
+
+| Archivo | Evidencia o responsabilidad |
+| --- | --- |
+| `scripts/ci/validate_device.py` | Build/archive de dispositivo y validación estructural real |
+| `.github/workflows/ios-ci.yml` | Matriz de Simulator y job de archive |
+| `.github/workflows/ios-testflight.yml` | Distribución manual futura, protegida por configuración |
+| `scripts/ci/distribute_testflight.py` | Preflight, keychain temporal, archive firmado, export y upload |
+| `scripts/ci/test_distribution_safety.py` | Bloqueo sin credenciales, sin tocar Apple ni crear archivos |
+| `scripts/check_repository_security.py` | Revisión del índice sin imprimir secretos |
+| `docs/DEVICE_READINESS.md` | Auditoría y requisitos concretos de ambas vías de instalación |
+| `docs/IPHONE_TEST_PLAN.md` | Checklist físico pendiente, con resultados esperados |

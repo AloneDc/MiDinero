@@ -1,0 +1,88 @@
+name: iOS TestFlight (manual, requires real signing)
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'New CFBundleVersion, greater than previous upload (for example 2)'
+        required: true
+        type: string
+      confirm_upload:
+        description: 'Explicitly archive, sign and upload this main revision to App Store Connect'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-testflight-distribution
+  cancel-in-progress: false
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+
+jobs:
+  validate:
+    name: Explicit opt-in and tests before accessing signing secrets
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - name: Require main, explicit upload and configured repository gate
+        env:
+          ENABLED: ${{ vars.TESTFLIGHT_ENABLED }}
+          CONFIRMED: ${{ inputs.confirm_upload }}
+        run: |
+          if [[ "$GITHUB_REF" != refs/heads/main || "$ENABLED" != true || "$CONFIRMED" != true ]]; then
+            echo 'Distribution blocked: main + TESTFLIGHT_ENABLED=true + confirm_upload are required.'
+            exit 1
+          fi
+      - name: Checkout exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check project, secrets guard and all Simulator tests
+        run: |
+          python3 scripts/check_repository_security.py
+          python3 scripts/verify_static.py
+          python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
+          python3 scripts/ci/validate_xcode.py
+      - name: Preserve test evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: testflight-test-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/ci-evidence/
+          if-no-files-found: warn
+          retention-days: 14
+
+  distribute:
+    name: Sign, export IPA and upload (not Apple processing/review)
+    needs: validate
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: testflight
+    steps:
+      - name: Checkout tested revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Import real signing material, archive, export and upload
+        env:
+          BUILD_NUMBER: ${{ inputs.build_number }}
+          APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          APPLE_DISTRIBUTION_P12_BASE64: ${{ secrets.APPLE_DISTRIBUTION_P12_BASE64 }}
+          APPLE_DISTRIBUTION_P12_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_P12_PASSWORD }}
+          APPSTORE_PROFILE_BASE64: ${{ secrets.APPSTORE_PROFILE_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY_BASE64: ${{ secrets.ASC_PRIVATE_KEY_BASE64 }}
+        run: python3 scripts/ci/distribute_testflight.py
+      # No IPA/archive/profile/keychain/log artifact upload: signing data stays on
+      # the ephemeral hosted runner. The Python script cleans up in finally.
+      - name: Remove signing material if the previous process was interrupted
+        if: always()
+        run: python3 scripts/ci/distribute_testflight.py --cleanup

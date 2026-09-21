@@ -1,5 +1,9 @@
 # Registrar gasto: contrato y límites
 
+La [auditoría de dispositivo de Fase 3](DEVICE_READINESS.md#auditoría-de-registrar-gasto)
+contrasta también la metadata generada en el archive de iPhone. El recorrido físico
+se verifica con [IPHONE_TEST_PLAN.md](IPHONE_TEST_PLAN.md), todavía pendiente.
+
 ## Camino real implementado
 
 `MiDineroShortcuts → RegisterExpenseIntent → ExpenseIntentWriter → TransactionRepository
