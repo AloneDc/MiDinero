@@ -171,10 +171,185 @@ Referencias oficiales consultadas y availability revisada:
 
 ## Fase 2 — Validación Xcode
 
-Validación remota en preparación. Destino confirmado por el usuario:
-`https://github.com/AloneDc/MiDinero`. Cuenta autenticada con permiso de push.
-Workflow: `.github/workflows/ios-ci.yml`, runner `macos-15`, Xcode seleccionado
-por el runner y verificado en ejecución. No se presupone el modelo de Simulator.
+### Entorno macOS
 
-Estado provisional: `NOT_EXECUTED_ON_MACOS`. Esta sección se actualizará con el
-resultado y enlace de la ejecución real; no es una afirmación de éxito.
+GitHub Actions, repositorio [AloneDc/MiDinero](https://github.com/AloneDc/MiDinero),
+runner `macos-15`. Edición y seguimiento desde Windows mediante Git y la API de
+GitHub, con autenticación existente y sin almacenar tokens en archivos.
+
+Entorno observado: macOS 15.7.9 (24G830), arquitectura arm64, Xcode 16.4 (16F6),
+Apple Swift 6.1.2 (`swiftlang-6.1.2.1.2 clang-1700.0.13.5`), SDK Simulator 18.5.
+Se registran versiones reales, SDKs, revisión, targets y scheme en cada intento.
+El runtime se elige de `simctl` y `xcodebuild -showdestinations`, priorizando el
+SDK instalado; el UUID y la arquitectura se pasan explícitamente a Xcode.
+
+### Build
+
+El [quinto y último intento](https://github.com/AloneDc/MiDinero/actions/runs/35658862995),
+revisión `eeeb4b02cfd38d8a96cf22b14db4aa670396ed05`, terminó correctamente:
+
+| Operación real de Xcode | Resultado | Salida |
+| --- | --- | --- |
+| `-list -project MiDinero.xcodeproj` | Tres targets y scheme MiDinero reconocidos | 0 |
+| Debug `build` | `BUILD SUCCEEDED` | 0 |
+| `build-for-testing` | `TEST BUILD SUCCEEDED` | 0 |
+| `test-without-building` | `TEST EXECUTE SUCCEEDED` | 0 |
+| Release `build`, arm64 y x86_64 | `BUILD SUCCEEDED` | 0 |
+
+El pipeline se ejecutó con `python3 scripts/ci/validate_xcode.py`. Comandos de build
+(variables que representan los valores reales de esta ejecución):
+
+```bash
+DD=/Users/runner/work/MiDinero/MiDinero/build/CI-DerivedData
+EVID=/Users/runner/work/MiDinero/MiDinero/build/ci-evidence
+DEST='platform=iOS Simulator,id=22A3039C-6A45-47F4-82D4-80C58CA94379,arch=arm64'
+BASE=(xcodebuild -project MiDinero.xcodeproj -scheme MiDinero
+  -configuration Debug -destination "$DEST" -destination-timeout 120
+  -derivedDataPath "$DD" CODE_SIGNING_ALLOWED=NO SWIFT_STRICT_CONCURRENCY=complete)
+"${BASE[@]}" -resultBundlePath "$EVID/Build.xcresult" build
+"${BASE[@]}" -resultBundlePath "$EVID/BuildForTesting.xcresult" build-for-testing
+xcodebuild -project MiDinero.xcodeproj -scheme MiDinero -configuration Release \
+  -destination 'generic/platform=iOS Simulator' -derivedDataPath "$DD" \
+  CODE_SIGNING_ALLOWED=NO SWIFT_STRICT_CONCURRENCY=complete \
+  -resultBundlePath "$EVID/Release.xcresult" build
+```
+
+Los [comandos exactos expandidos](evidence/phase2/commands.md),
+[argumentos y códigos de salida](evidence/phase2/result.json) y
+[procedencia/versiones/hash del artefacto](evidence/phase2/provenance.json)
+quedan conservados en Git. El UUID anterior es evidencia histórica: al reproducir,
+el script detecta un dispositivo disponible en el Mac actual.
+
+### Tests
+
+Resultado real del último intento, contrastando enumeración Xcode, salida XCTest
+y `xcresulttool get test-results summary`: **26 descubiertas, 26 ejecutadas,
+26 aprobadas, 0 fallidas, 0 omitidas y 0 fallos esperados**.
+
+Comandos ejecutados con `BASE` y `EVID` definidos arriba:
+
+```bash
+"${BASE[@]}" test-without-building -enumerate-tests -test-enumeration-style flat \
+  -test-enumeration-format text -test-enumeration-output-path "$EVID/discovered-tests.txt"
+"${BASE[@]}" -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1 \
+  -resultBundlePath "$EVID/Tests.xcresult" test-without-building
+xcrun xcresulttool get test-results summary --path "$EVID/Tests.xcresult"
+```
+
+Se conservan [inventario descubierto](evidence/phase2/discovered-tests.txt),
+[resumen nativo](evidence/phase2/test-summary.json) y
+[resultado individual de cada test](evidence/phase2/test-details.json).
+
+| Grupo | Ejecutadas / aprobadas |
+| --- | --- |
+| MoneyTests | 7 / 7 |
+| MonthlySummaryTests | 7 / 7 |
+| CSVExporterTests | 3 / 3 |
+| PersistenceTests | 7 / 7 |
+| AppIntentTests | 1 / 1 |
+| MiDineroUITests | 1 / 1 |
+
+Incluye guardar gasto e ingreso, totales/balance mensual, categorías/porcentajes,
+precisión, edición, eliminación, cambio/límites de mes, año bisiesto y DST.
+La prueba nueva del intent ejecutó `perform()`, comprobó identidad del contenedor,
+lectura desde `LedgerStore`, actualización del resumen y reapertura del archivo.
+XCUITest registró, cerró/reabrió, editó, comprobó el reporte, canceló y confirmó el
+borrado, y volvió a abrir. Se inspeccionaron tres capturas reales en iPhone SE
+(3.ª generación), iOS 18.5: [Inicio S/ 12.50](evidence/phase2/home-after-save.png),
+[reporte S/ 20.00](evidence/phase2/report-after-edit.png) y
+[estado vacío final](evidence/phase2/empty-after-delete.png).
+No se ejecutó por separado `swift test`; las 17 pruebas del núcleo sí se ejecutaron
+dentro del target iOS. Ninguna prueba del scheme quedó sin ejecutar.
+
+### Errores encontrados y correcciones
+
+| Intento | Evidencia y corrección |
+| --- | --- |
+| [1 / 381b45c](https://github.com/AloneDc/MiDinero/actions/runs/35656213139) | `-showdestinations` solo anunció destinos genéricos antes de inicializar CoreSimulator. Se cambió el orden, se indicó SDK Simulator y se contrastaron destinos y dispositivos instalados. |
+| [2 / a46f0af](https://github.com/AloneDc/MiDinero/actions/runs/35656506137) | Falló `testEmptyExportStillHasHeader`: Foundation de Apple consume el BOM al decodificar UTF-8. La prueba ahora compara bytes completos, incluyendo BOM y CRLF. El exportador no cambió. |
+| 2 / a46f0af | Warnings de key paths no `Sendable` en `SortDescriptor` y `#Predicate`. Se habilitó `InferSendableFromCaptures`, manteniendo comprobación completa de concurrencia, MainActor y predicados. Sin `@unchecked Sendable`, `@preconcurrency` ni supresión de diagnósticos. |
+| 2 / a46f0af | Warnings al quitar símbolos de bibliotecas XCTest firmadas del SDK. Debug ahora usa `COPY_PHASE_STRIP=NO`, conservando los símbolos de depuración. |
+| [3 / 06a7ac6](https://github.com/AloneDc/MiDinero/actions/runs/35657567092) | `TransactionEditorView.swift:43`: el compilador no pudo resolver la expresión en tiempo razonable tras habilitar la inferencia. Se dividió la vista en secciones y el botón usa una closure explícita. Mismo diseño y comportamiento. |
+| 3 / 06a7ac6 | Xcode anunció varios destinos para el mismo UUID (arm64/x86_64). Se añadió la arquitectura detectada a `-destination`. |
+| [4 / 57c6aa0](https://github.com/AloneDc/MiDinero/actions/runs/35658255232) | Debug, Release y 26 tests aprobados. Se corrigieron después dos avisos menores: `var intent` pasó a `let` (setter de `@Parameter` no mutante) y `-showBuildSettings` usa también el destino/arquitectura concretos. |
+| [5 / eeeb4b0](https://github.com/AloneDc/MiDinero/actions/runs/35658862995) | Se repitió el pipeline completo: Debug, tests y Release aprobados; los dos avisos menores desaparecieron. |
+
+La inferencia de key paths está descrita en
+[SE-0418](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0418-inferring-sendable-for-methods.md).
+También se acotaron los comandos y se hizo flush inmediato de logs para conservar
+diagnósticos ante interrupciones. La cancelación del intento 2 no se cuenta como éxito.
+
+### Warnings
+
+La ejecución final no produjo warnings de Swift/concurrencia ni errores de compilador.
+Permanece **un aviso** de la herramienta de Apple en **MiDineroUITests**:
+`Metadata extraction skipped. No AppIntents.framework dependency found`.
+Ese target no contiene intents. La app sí generó metadata y entrenó ambas frases
+en Debug y Release; no se desactivó su procesamiento para silenciar el aviso.
+
+El log de ejecución también registra Launch Services `NSOSStatusErrorDomain -10814`
+al actualizar parámetros de App Shortcuts en Simulator. No se presenta el descubrimiento
+de Atajos como validado: requiere prueba física. Los errores CoreData de ruta inválida
+proceden del test deliberado `testStorageErrorPropagatesInsteadOfFallingBackToMemory`,
+que aprobó; no son fallos de persistencia durante el flujo normal.
+
+### App Intents
+
+El build real procesó AppIntent, parámetros, AppEntity/EntityStringQuery,
+AppShortcutsProvider, parameter summary, `needsValueError`, política de autenticación
+y metadata. El log registra entrenamiento de ambas frases en español y copia a
+`MiDinero.app/Metadata.appintents/`.
+
+La prueba aprobada invoca `perform()` directamente. No equivale al runtime de
+Siri/Atajos: quedan pendientes en iPhone firmado el descubrimiento del shortcut,
+resolución de monto/categoría/nota, cancelación, desbloqueo y ejecución con la app
+terminada, seguida de un movimiento único, totales y reporte actualizados.
+
+### Persistencia
+
+App e intent pertenecen al target `MiDinero`, sin extensión. Ambos obtienen
+`PersistenceController.shared.container()`, que cachea una única instancia en
+MainActor y configura `Application Support/MiDinero/MiDinero.store` explícitamente.
+Cada operación crea un contexto de ese contenedor y guarda antes de confirmar.
+La app recarga al guardar y al activarse. No se añadió App Group: no existe otro
+target de producto que requiera compartir sandbox. Un widget futuro necesitará
+capability y migración, no un almacén independiente.
+
+Las pruebas usan memoria o archivos temporales. TestAction inyecta un UUID de pruebas;
+la prueba de `perform()` exige esa variable antes de usar el singleton. UI usa otro
+UUID por ejecución y lo conserva al relanzar. No se lee ni borra la base personal.
+
+### Proyecto y comprobaciones complementarias
+
+- Scheme compartido MiDinero, targets app/unit/UI, dependencias y test host.
+- 20 fuentes de app, 6 archivos unit/integration, 1 de UI, incluidos en Sources;
+  deployment target iOS 17, Swift 5 con compilador Swift 6 e inferencia SE-0418.
+- Xcode procesó Assets/AppIcon, Info.plist, PrivacyInfo.xcprivacy, macros SwiftData,
+  SwiftUI y Charts, y enlazó frameworks mediante Swift autolinking.
+- Bundle IDs `com.eduardo.MiDinero`, `.MiDineroTests`, `.MiDineroUITests`.
+  Simulator con `CODE_SIGNING_ALLOWED=NO`; sin entitlements/App Groups/iCloud/SiriKit.
+- 75 assertions estructurales, 96 objetos PBX y 28 archivos Swift analizados.
+  Cinco tests Python del parser aprobados; actionlint 1.7.12 sin errores.
+  Son comprobaciones auxiliares, separadas de XCTest/XCUITest.
+- Workflow con logs, comandos, códigos de salida, inventario descubierto, JSON,
+  `.xcresult` y capturas UI; retención de artefactos de 14 días. Cambios solo de
+  documentación no repiten CI; cambios de código, proyecto o pipeline sí lo ejecutan.
+- Ninguna característica ni prueba fue eliminada o deshabilitada.
+- Se revisó el diff de código, proyecto, tests, CI y documentación, y los logs
+  originales de las ejecuciones. La entrega final añade solo documentación y
+  evidencia al commit de código validado; no modifica binarios ni pruebas.
+
+### Límites y siguiente comprobación
+
+No hubo iPhone físico, signing de dispositivo, ejecución real de Siri/Atajos,
+previews ni pruebas de VoiceOver, hápticos o modo oscuro. No se ejecutó un runtime
+iOS 17; se compiló con deployment target 17 y se probó en Simulator 18.5.
+El siguiente paso es instalar en un iPhone firmado y completar la matriz de
+Atajos de [VALIDATION.md](VALIDATION.md), investigando especialmente el diagnóstico
+Launch Services observado en Simulator. No se declara aprobado ese recorrido del sistema.
+
+### Estado final
+
+COMPILED_AND_TESTED
+
+Dos ejecuciones completas aprobadas; la última corresponde a `eeeb4b0`.

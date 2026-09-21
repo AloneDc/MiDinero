@@ -58,7 +58,14 @@ Revisar warnings de concurrencia con `SWIFT_STRICT_CONCURRENCY=complete`, expans
 de SwiftData y extracción de metadata App Intents. Corregir cualquier fallo y repetir
 el comando. No eliminar una base personal para hacer pasar una prueba.
 
-## Matriz funcional y visual pendiente
+## Matriz funcional y visual
+
+El XCUITest automatiza registro, reapertura, edición, reporte, cancelación de
+borrado y eliminación. Las pruebas unitarias verifican cálculos, validaciones,
+CSV y persistencia. Los resultados y capturas reales están en
+[ASTRA_EVALUATION.md](ASTRA_EVALUATION.md#fase-2--validación-xcode).
+VoiceOver, Dynamic Type, modo oscuro, errores por disco lleno y Siri/Atajos del
+sistema requieren todavía la revisión manual descrita a continuación.
 
 | Escenario | Resultado esperado |
 | --- | --- |

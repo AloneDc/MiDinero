@@ -9,7 +9,8 @@
 La acción pertenece **solo al target MiDinero**, no a una extensión. No necesita un
 servidor, una llamada de red ni abrir una pantalla. Se conserva el modo de ejecución
 en segundo plano predeterminado de AppIntent (no se solicita foreground). Se evita
-usar las APIs de modos más recientes, para admitir iOS 17/Xcode 15.
+usar las APIs de modos más recientes, para admitir iOS 17. El proyecto requiere
+Xcode 16 o posterior por la inferencia Sendable del compilador habilitada en fase 2.
 
 Los parámetros obligatorios son texto numérico y una entidad de categoría persistida.
 Los IDs estables permiten reutilizar un atajo aunque cambie el nombre visible de una
@@ -26,6 +27,12 @@ guardado. No se asume que una notificación local atraviese procesos: la recarga
 foreground es el punto de reconciliación. Las consultas usan contextos nuevos.
 
 ## Qué controla iOS
+
+En la fase 2, Xcode compiló y extrajo la metadata; XCTest ejecutó `perform()` y
+comprobó persistencia compartida. Simulator registró Launch Services `-10814` al
+actualizar parámetros del App Shortcut. El descubrimiento y la ejecución a través
+de Siri/Atajos siguen pendientes de iPhone físico; ver la
+[evidencia y los límites](ASTRA_EVALUATION.md#fase-2--validación-xcode).
 
 - Los parámetros no opcionales sin valor pueden provocar una pregunta del sistema.
   La nota `String?` no provoca una pregunta automática; esto está documentado por

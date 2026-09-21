@@ -4,8 +4,9 @@ Finanzas personales para iPhone: registrar un gasto en segundos, desde la app o
 Atajos, y verlo en el historial y el reporte mensual. SwiftUI, SwiftData, App Intents
 y Charts; sin cuentas, backend, sincronización ni dependencias externas de ejecución.
 
-**Estado:** vertical slice implementado, con validación Xcode automatizada en
-[GitHub Actions](https://github.com/AloneDc/MiDinero/actions/workflows/ios-ci.yml).
+**Estado:** Debug y Release compilados con Xcode 16.4; 26 pruebas descubiertas,
+ejecutadas y aprobadas en iOS Simulator 18.5.
+[Ejecución aprobada](https://github.com/AloneDc/MiDinero/actions/runs/35658862995).
 Resultados reales y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-2--validación-xcode).
 
 ## Abrir y ejecutar

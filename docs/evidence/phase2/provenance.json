@@ -1,0 +1,32 @@
+{
+  "run_url": "https://github.com/AloneDc/MiDinero/actions/runs/35658862995",
+  "source_commit": "eeeb4b02cfd38d8a96cf22b14db4aa670396ed05",
+  "downloaded_artifact_sha256": "68677dd68f56bb58095d4dc6b2a1f8f48b5bf35dfa1ff1de9f559ec3db775f5b",
+  "environment": {
+    "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.9\nBuildVersion:\t\t24G830",
+    "architecture": "arm64",
+    "xcode-version": "Xcode 16.4\nBuild version 16F6",
+    "swift-version": "swift-driver version: 1.120.5 Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)\nTarget: arm64-apple-macosx15.0",
+    "sdk-version": "18.5",
+    "sdk-path": "/Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk",
+    "revision": "eeeb4b02cfd38d8a96cf22b14db4aa670396ed05",
+    "targets-and-schemes": "Command line invocation:\n    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -list -project MiDinero.xcodeproj\n\nInformation about project \"MiDinero\":\n    Targets:\n        MiDinero\n        MiDineroTests\n        MiDineroUITests\n\n    Build Configurations:\n        Debug\n        Release\n\n    If no build configuration is specified and -scheme is not passed then \"Release\" is used.\n\n    Schemes:\n        MiDinero"
+  },
+  "screenshots": [
+    {
+      "file": "empty-after-delete.png",
+      "source_attachment": "66C0FC54-EC9B-4959-B61D-2A6F386FCA9D.png",
+      "source_test": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests/testRegisterReopenEditReportAndDelete"
+    },
+    {
+      "file": "report-after-edit.png",
+      "source_attachment": "0AD6E529-AA87-4FB9-9DA3-43DD4C3C5A66.png",
+      "source_test": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests/testRegisterReopenEditReportAndDelete"
+    },
+    {
+      "file": "home-after-save.png",
+      "source_attachment": "86E8CBFA-8ABB-408D-A1DE-37A60574F1EA.png",
+      "source_test": "test://com.apple.xcode/MiDinero/MiDineroUITests/MiDineroUITests/testRegisterReopenEditReportAndDelete"
+    }
+  ]
+}
