@@ -98,10 +98,10 @@ class Validation:
             self.command("simulator-boot", ["xcrun", "simctl", "boot", device["udid"]])
         self.command("simulator-ready", ["xcrun", "simctl", "bootstatus", device["udid"], "-b"], timeout=300)
         self.command("destinations-after-boot", base + ["-sdk", "iphonesimulator", "-showdestinations"])
-        self.command("build-settings", base + ["-sdk", "iphonesimulator", "-showBuildSettings"])
         options = ["-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device['udid']},arch={platform.machine()}",
                    "-destination-timeout", "120", "-derivedDataPath", str(DERIVED),
                    "CODE_SIGNING_ALLOWED=NO", "SWIFT_STRICT_CONCURRENCY=complete"]
+        self.command("build-settings", base + options + ["-showBuildSettings"])
         self.result["status"] = "BUILD_FAILED"
         self.command("build", base + options + ["-resultBundlePath", str(EVIDENCE / "Build.xcresult"), "build"])
         self.command("build-for-testing", base + options + ["-resultBundlePath", str(EVIDENCE / "BuildForTesting.xcresult"), "build-for-testing"])

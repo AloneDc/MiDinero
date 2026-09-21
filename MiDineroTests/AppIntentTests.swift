@@ -23,7 +23,7 @@ final class AppIntentTests: XCTestCase {
             }
         }
 
-        var intent = RegisterExpenseIntent()
+        let intent = RegisterExpenseIntent()
         intent.amount = "12,50"
         intent.category = ExpenseCategoryEntity(info: info)
         intent.note = marker
