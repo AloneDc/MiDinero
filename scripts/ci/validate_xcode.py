@@ -64,7 +64,7 @@ class Validation:
         self.command("developer-directory", ["xcode-select", "-p"])
         xcode = self.command("xcode-version", ["xcodebuild", "-version"])
         self.command("swift-version", ["swift", "--version"])
-        self.command("sdk-version", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"])
+        sdk_version = self.command("sdk-version", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"]).strip()
         self.command("sdk-path", ["xcrun", "--sdk", "iphonesimulator", "--show-sdk-path"])
         self.command("sdks", ["xcodebuild", "-showsdks"])
         self.command("revision", ["git", "rev-parse", "HEAD"])
@@ -73,14 +73,16 @@ class Validation:
             raise RuntimeError("This evidence pipeline requires Xcode >= 16 for xcresulttool test summaries.")
         self.command("targets-and-schemes", ["xcodebuild", "-list", "-project", "MiDinero.xcodeproj"])
         base = ["xcodebuild", "-project", "MiDinero.xcodeproj", "-scheme", "MiDinero"]
-        destinations = self.command("destinations", base + ["-showdestinations"])
         inventory = self.json_command("simulators", ["xcrun", "simctl", "list", "--json"])
-        device = select_simulator(inventory, destinations, os.environ.get("SIMULATOR_ID"))
+        destinations = self.command("destinations", base + ["-sdk", "iphonesimulator", "-showdestinations"])
+        device = select_simulator(inventory, destinations, os.environ.get("SIMULATOR_ID"), sdk_version)
         self.result["simulator"] = device
         print(f"Selected available destination: {device['name']} / iOS {device['runtimeVersion']} / {device['udid']}")
         if device["state"] != "Booted":
             self.command("simulator-boot", ["xcrun", "simctl", "boot", device["udid"]])
         self.command("simulator-ready", ["xcrun", "simctl", "bootstatus", device["udid"], "-b"])
+        self.command("destinations-after-boot", base + ["-sdk", "iphonesimulator", "-showdestinations"])
+        self.command("build-settings", base + ["-sdk", "iphonesimulator", "-showBuildSettings"])
         options = ["-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device['udid']}",
                    "-destination-timeout", "120", "-derivedDataPath", str(DERIVED),
                    "CODE_SIGNING_ALLOWED=NO", "SWIFT_STRICT_CONCURRENCY=complete"]

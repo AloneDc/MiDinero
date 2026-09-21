@@ -4,7 +4,8 @@ from __future__ import annotations
 import re
 
 
-def select_simulator(inventory: dict, destinations: str, requested: str | None = None) -> dict:
+def select_simulator(inventory: dict, destinations: str, requested: str | None = None,
+                     sdk_version: str | None = None) -> dict:
     compatible = set(re.findall(r"id:\s*([A-Fa-f0-9-]{36})", destinations))
     runtimes = {runtime["identifier"]: runtime for runtime in inventory.get("runtimes", [])}
     choices = []
@@ -16,13 +17,16 @@ def select_simulator(inventory: dict, destinations: str, requested: str | None =
         if version < (17,):
             continue
         for device in devices:
-            if (device.get("isAvailable") and device.get("name", "").startswith("iPhone")
-                    and device.get("udid") in compatible):
+            # Fresh runners can initially list only generic Xcode destinations.
+            # In that case use an installed device matching the detected SDK, boot
+            # it, and let xcodebuild resolve the explicit UUID authoritatively.
+            matches = device.get("udid") in compatible if compatible else runtime.get("version") == sdk_version
+            if (device.get("isAvailable") and device.get("name", "").startswith("iPhone") and matches):
                 choices.append(dict(device, runtime=runtime_id, runtimeVersion=runtime["version"], version=version))
     if requested:
         choices = [device for device in choices if device["udid"] == requested]
     if not choices:
-        raise ValueError("No available iPhone (iOS >= 17) matches xcodebuild -showdestinations and simctl.")
+        raise ValueError("No available iPhone (iOS >= 17) matches Xcode destinations or the detected Simulator SDK.")
     choices.sort(key=lambda device: (device["version"], device["name"], device["udid"]), reverse=True)
     selected = choices[0]
     selected.pop("version")
