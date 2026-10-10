@@ -29,9 +29,9 @@ bash scripts/validate_mac.sh
 # Selección opcional: SIMULATOR_ID=<UUID> bash scripts/validate_mac.sh
 ```
 
-Necesita Xcode 16+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
+Necesita Xcode 26+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
 El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-26`,
-en una matriz explícita Xcode 16.4 / 26.2:
+con el Xcode predeterminado del runner, cuya versión real se registra y debe ser 26+:
 
 1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisión y targets/schemes.
 2. Detecta dispositivos con `simctl` y destinos con `xcodebuild -showdestinations`.
@@ -56,7 +56,7 @@ archive sin firma, validación estructural (arm64, SDK, Info.plist, icono, priva
 App Intents, frameworks y dSYM) y empaquetado del xcarchive. Reproducir en Mac:
 
 ```bash
-export DEVELOPER_DIR=/Applications/Xcode_26.2.app/Contents/Developer
+xcodebuild -version # Debe ser 26 o posterior
 python3 scripts/ci/validate_device.py
 ```
 
@@ -64,7 +64,7 @@ Los comandos y resultados están en `build/device-evidence/result.json`; el arte
 `device-evidence-<run>-<attempt>` incluye logs, metadata generada y archive `.tar.gz`
 sin firma durante 14 días. Mover los directorios `build/device-evidence/` y
 `build/device/MiDinero.xcarchive` antes de repetir. No es una IPA instalable.
-La firma/TestFlight y su workflow futuro se describen en
+La firma/TestFlight y su workflow se describen en
 [DEVICE_READINESS.md](DEVICE_READINESS.md); los pasos físicos en
 [IPHONE_TEST_PLAN.md](IPHONE_TEST_PLAN.md).
 

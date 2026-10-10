@@ -65,5 +65,14 @@ base64, claves privadas, contraseñas Apple ni códigos 2FA en el chat o Git.
 
 `docs/evidence/phase3` y `docs/evidence/mission4/device` corresponden a validaciones
 anteriores. No prueban que el nuevo runner macos-26 ni cloud signing hayan pasado.
-La nueva ejecución tendrá evidencia separada. Tests verdes no acreditan permisos
-Apple, upload, procesamiento, disponibilidad TestFlight ni instalación física.
+Nueva ejecución [38017443250](https://github.com/AloneDc/MiDinero/actions/runs/38017443250),
+revisión `293b57684a4994e109e6e67b33eea8df74b4d0a5`: **success**.
+`macos-26`, Xcode **26.6**, build **17F113**, SDK iphoneos **26.5**.
+Debug/Release Simulator y build/archive Release iPhone aprobados.
+Xcode descubrió y ejecutó **26 tests: 26 aprobados, 0 fallos, 0 omitidos**.
+No fue necesario cambiar código de la app ni quitar funcionalidades.
+Evidencia en `docs/evidence/mission4/macos26`; el resumen de simulador se extrajo
+de los logs originales de GitHub (la descarga del artifact de simulador agotó
+el tiempo de espera; no se presenta un result.json reconstruido como original).
+Tests verdes no acreditan permisos Apple, upload, procesamiento, disponibilidad
+TestFlight ni instalación física. No hay Secrets Apple configurados en GitHub.

@@ -4,20 +4,21 @@ Finanzas personales para iPhone: registrar un gasto en segundos, desde la app o
 Atajos, y verlo en el historial y el reporte mensual. SwiftUI, SwiftData, App Intents
 y Charts; sin cuentas, backend, sincronización ni dependencias externas de ejecución.
 
-**Estado:** Debug y Release compilados con Xcode 16.4 y 26.2; 26/26 pruebas
-aprobadas en cada Simulator (iOS 18.5 y 26.2). Release para iPhone y archive arm64
-sin firma también validados con SDK 26.2. Firma, TestFlight y prueba física pendientes.
-[CI aprobada](https://github.com/AloneDc/MiDinero/actions/runs/35661791709).
-Resultados y límites en [ASTRA_EVALUATION.md](docs/ASTRA_EVALUATION.md#fase-3--device-readiness).
+**Estado:** Debug y Release compilados con Xcode 26.6 (17F113) en `macos-26`;
+26/26 pruebas aprobadas, sin fallos ni omitidas. Release para iPhone y archive
+arm64 sin firma validados con SDK 26.5. Firma cloud, TestFlight y prueba física pendientes.
+[CI aprobada](https://github.com/AloneDc/MiDinero/actions/runs/38017443250).
+Configuración y límites en [TESTFLIGHT_MISSION_4.md](docs/TESTFLIGHT_MISSION_4.md).
 
 Preparación para dispositivo y distribución: [DEVICE_READINESS.md](docs/DEVICE_READINESS.md).
 Próxima validación manual: [plan de prueba en iPhone](docs/IPHONE_TEST_PLAN.md).
 TestFlight exige Xcode 26+/SDK iOS 26+; el mínimo para ejecutar sigue siendo iOS 17.
-El workflow separado de distribución es manual y requiere firma real; no se ha ejecutado.
+El workflow de distribución se ejecuta manualmente y usa firma cloud con Team API key;
+todavía no se ha ejecutado con credenciales reales de Apple.
 
 ## Abrir y ejecutar
 
-- Mac con Xcode 16 o posterior para el pipeline de evidencia; Simulator iOS 17 o posterior.
+- Mac con Xcode 26 o posterior para el pipeline de evidencia; Simulator iOS 17 o posterior.
 - iPhone con iOS 17 o posterior. Elige una versión de Xcode compatible con su iOS.
 - Abre `MiDinero.xcodeproj`, selecciona el scheme **MiDinero** y un iPhone Simulator;
   ejecuta con **⌘R**. El proyecto está incluido; no necesitas generadores ni paquetes.
