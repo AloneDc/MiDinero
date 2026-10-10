@@ -1,19 +1,17 @@
-"""Future manual CI distribution. Never run with fabricated signing material.
+"""Archive without local signing assets; automatic cloud signing during export.
 
-Apple Distribution p12 + App Store provisioning profile + team ASC API key.
-No developer account passwords, third-party signing service or Fastlane needed.
+Team App Store Connect API key only. No p12 or manually supplied profile.
+Cloud export and upload require real Apple permissions; CI alone cannot prove them.
 """
 import base64
-from datetime import datetime, timezone
-import json
 import os
 from pathlib import Path
 import plistlib
 import re
-import secrets
 import shutil
 import subprocess
 import sys
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -34,25 +32,11 @@ def work_directory() -> Path:
 def cleanup(work: Path) -> None:
     if not work.exists():
         return
-    # The work directory is fixed under RUNNER_TEMP. Profile path was written by us.
-    marker = work / 'installed-profile.txt'
-    if marker.exists():
-        profile = Path(marker.read_text())
-        allowed = Path.home() / 'Library/Developer/Xcode/UserData/Provisioning Profiles'
-        if profile.parent == allowed and re.fullmatch(r'[A-Fa-f0-9-]+\.mobileprovision', profile.name):
-            profile.unlink(missing_ok=True)
-    prior = work / 'prior-keychains.json'
-    if prior.exists():
-        subprocess.run(['security', 'list-keychains', '-d', 'user', '-s', *json.loads(prior.read_text())],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
-    subprocess.run(['security', 'delete-keychain', str(work / 'signing.keychain-db')],
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
     shutil.rmtree(work)
 
 
 def distribute(work: Path) -> None:
-    names = ('BUILD_NUMBER', 'APP_BUNDLE_ID', 'APPLE_TEAM_ID', 'APPLE_DISTRIBUTION_P12_BASE64',
-             'APPLE_DISTRIBUTION_P12_PASSWORD', 'APPSTORE_PROFILE_BASE64', 'ASC_KEY_ID',
+    names = ('BUILD_NUMBER', 'APP_BUNDLE_ID', 'APPLE_TEAM_ID', 'ASC_KEY_ID',
              'ASC_ISSUER_ID', 'ASC_PRIVATE_KEY_BASE64')
     missing = [name for name in names if not os.environ.get(name)]
     if missing:
@@ -73,79 +57,67 @@ def distribute(work: Path) -> None:
     print(xcode, 'iOS SDK ' + sdk, flush=True)
     work.mkdir(mode=0o700)
     os.umask(0o077)
-    certificate = work / 'distribution.p12'
-    profile_file = work / 'appstore.mobileprovision'
     keys = work / 'private_keys'
     keys.mkdir()
-    for name, destination in (
-        ('APPLE_DISTRIBUTION_P12_BASE64', certificate), ('APPSTORE_PROFILE_BASE64', profile_file),
-        ('ASC_PRIVATE_KEY_BASE64', keys / f"AuthKey_{env['ASC_KEY_ID']}.p8"),
-    ):
-        destination.write_bytes(base64.b64decode(env[name], validate=True))
-    profile = plistlib.loads(run(['security', 'cms', '-D', '-i', str(profile_file)], capture=True))
-    entitlement = profile.get('Entitlements', {})
+    key = keys / f"AuthKey_{env['ASC_KEY_ID']}.p8"
+    key.write_bytes(base64.b64decode(env['ASC_PRIVATE_KEY_BASE64'], validate=True))
+    # Verify the private key parses without printing its contents.
+    run(['openssl', 'pkey', '-in', str(key), '-check', '-noout'], capture=True)
     bundle = env['APP_BUNDLE_ID']
     team = env['APPLE_TEAM_ID']
-    # Prefix need not equal Team ID for older developer accounts.
-    prefixes = profile.get('ApplicationIdentifierPrefix', [])
-    if (profile.get('TeamIdentifier') != [team]
-            or entitlement.get('application-identifier') not in [prefix + '.' + bundle for prefix in prefixes]
-            or entitlement.get('com.apple.developer.team-identifier') != team
-            or entitlement.get('get-task-allow') is not False
-            or profile.get('ProvisionedDevices') or profile.get('ProvisionsAllDevices')
-            or not profile.get('DeveloperCertificates')):
-        raise RuntimeError('Expected an App Store distribution profile for this exact bundle and Team.')
-    if profile['ExpirationDate'].replace(tzinfo=timezone.utc) <= datetime.now(timezone.utc):
-        raise RuntimeError('Provisioning profile expired.')
-    uuid = profile['UUID']
-    if not re.fullmatch(r'[A-Fa-f0-9-]{36}', uuid):
-        raise RuntimeError('Invalid profile UUID.')
-    profiles = Path.home() / 'Library/Developer/Xcode/UserData/Provisioning Profiles'
-    profiles.mkdir(parents=True, exist_ok=True)
-    installed = profiles / f'{uuid}.mobileprovision'
-    if installed.exists():
-        raise RuntimeError('Refusing to replace an existing provisioning profile.')
-    (work / 'installed-profile.txt').write_text(str(installed))
-    shutil.copyfile(profile_file, installed)
-    keychain = work / 'signing.keychain-db'
-    password = secrets.token_urlsafe(32)
-    prior = re.findall(r'"([^"]+)"', run(['security', 'list-keychains', '-d', 'user'], capture=True).decode())
-    (work / 'prior-keychains.json').write_text(json.dumps(prior))
-    run(['security', 'create-keychain', '-p', password, str(keychain)], capture=True)
-    run(['security', 'set-keychain-settings', '-lut', '21600', str(keychain)], capture=True)
-    run(['security', 'unlock-keychain', '-p', password, str(keychain)], capture=True)
-    run(['security', 'import', str(certificate), '-P', env['APPLE_DISTRIBUTION_P12_PASSWORD'],
-         '-t', 'cert', '-f', 'pkcs12', '-k', str(keychain), '-T', '/usr/bin/codesign', '-T', '/usr/bin/security'], capture=True)
-    run(['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', password, str(keychain)], capture=True)
-    run(['security', 'list-keychains', '-d', 'user', '-s', str(keychain), *prior], capture=True)
-    identities = run(['security', 'find-identity', '-v', '-p', 'codesigning', str(keychain)], capture=True).decode()
-    if 'Apple Distribution:' not in identities:
-        raise RuntimeError('The p12 must contain a valid Apple Distribution identity AND its private key.')
+    authentication = ['-allowProvisioningUpdates', '-authenticationKeyPath', str(key),
+                      '-authenticationKeyID', env['ASC_KEY_ID'],
+                      '-authenticationKeyIssuerID', env['ASC_ISSUER_ID']]
     archive = work / 'MiDinero.xcarchive'
     export = work / 'export'
     options = work / 'ExportOptions.plist'
     options.write_bytes(plistlib.dumps({
         'method': 'app-store-connect', 'destination': 'export', 'teamID': team,
-        'signingStyle': 'manual', 'signingCertificate': 'Apple Distribution',
-        'provisioningProfiles': {bundle: uuid}, 'manageAppVersionAndBuildNumber': False,
+        'signingStyle': 'automatic', 'manageAppVersionAndBuildNumber': False,
         'stripSwiftSymbols': True, 'uploadSymbols': True,
     }))
-    # Archive compiles and signs the Release app. No automatic profile creation.
-    print('Archiving Release with real distribution signing.', flush=True)
+    # This app has no custom entitlements or extensions. Archive unsigned so a
+    # fresh hosted Mac needs neither a development certificate nor registered UDID.
+    # Export uses Apple's cloud-managed distribution identity, never ad hoc signing.
+    print('Archiving Release; distribution signing happens during export.', flush=True)
     run(['xcodebuild', '-project', 'MiDinero.xcodeproj', '-scheme', 'MiDinero',
          '-configuration', 'Release', '-destination', 'generic/platform=iOS',
          '-derivedDataPath', str(work / 'DerivedData'), '-archivePath', str(archive),
-         'CODE_SIGN_STYLE=Manual', 'CODE_SIGN_IDENTITY=Apple Distribution',
+         'CODE_SIGN_STYLE=Automatic', 'CODE_SIGNING_ALLOWED=NO',
          f'DEVELOPMENT_TEAM={team}', f'PRODUCT_BUNDLE_IDENTIFIER={bundle}',
-         f'PROVISIONING_PROFILE_SPECIFIER={uuid}', f"CURRENT_PROJECT_VERSION={env['BUILD_NUMBER']}",
+         f"CURRENT_PROJECT_VERSION={env['BUILD_NUMBER']}",
          'archive'])
-    run(['codesign', '--verify', '--deep', '--strict', str(archive / 'Products/Applications/MiDinero.app')])
+    app = archive / 'Products/Applications/MiDinero.app'
+    info = plistlib.loads((app / 'Info.plist').read_bytes())
+    if (info.get('CFBundleIdentifier') != bundle or info.get('CFBundleVersion') != env['BUILD_NUMBER']
+            or info.get('CFBundleSupportedPlatforms') != ['iPhoneOS']):
+        raise RuntimeError('Archive bundle, version or device platform mismatch.')
+    if run(['xcrun', 'lipo', '-archs', str(app / info['CFBundleExecutable'])], capture=True).strip() != b'arm64':
+        raise RuntimeError('Archive must contain an arm64 iPhone executable.')
     print('Exporting signed IPA.', flush=True)
     run(['xcodebuild', '-exportArchive', '-archivePath', str(archive), '-exportPath', str(export),
-         '-exportOptionsPlist', str(options)])
+         '-exportOptionsPlist', str(options), *authentication])
     ipas = list(export.glob('*.ipa'))
     if len(ipas) != 1:
         raise RuntimeError('Expected exactly one signed IPA.')
+    # Verify the actual exported distribution signature and provisioning profile
+    # before sending the IPA to Apple. No archive/IPA/private logs are published.
+    unpacked = work / 'ipa-validation'
+    with zipfile.ZipFile(ipas[0]) as ipa:
+        ipa.extractall(unpacked)
+    apps = list((unpacked / 'Payload').glob('*.app'))
+    if len(apps) != 1:
+        raise RuntimeError('Expected one exported application.')
+    run(['codesign', '--verify', '--deep', '--strict', str(apps[0])])
+    profile = plistlib.loads(run(['security', 'cms', '-D', '-i',
+                                 str(apps[0] / 'embedded.mobileprovision')], capture=True))
+    entitlements = profile.get('Entitlements', {})
+    if (profile.get('TeamIdentifier') != [team] or profile.get('ProvisionedDevices')
+            or profile.get('ProvisionsAllDevices') or entitlements.get('get-task-allow') is not False
+            or entitlements.get('beta-reports-active') is not True
+            or entitlements.get('application-identifier') not in
+            [prefix + '.' + bundle for prefix in profile.get('ApplicationIdentifierPrefix', [])]):
+        raise RuntimeError('Export did not produce the expected App Store distribution profile.')
     # altool supports API-key auth. The key directory contains only this run's p8.
     os.environ['API_PRIVATE_KEYS_DIR'] = str(keys)
     print('Validating and uploading IPA to App Store Connect.', flush=True)
@@ -153,7 +125,7 @@ def distribute(work: Path) -> None:
     for operation in ('--validate-app', '--upload-app'):
         run(['xcrun', 'altool', operation, '--file', str(ipas[0]), '-t', 'ios', *auth])
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as stream:
-        stream.write('## TestFlight upload\n\nSigned archive, IPA export and upload completed. '
+        stream.write('## TestFlight upload\n\nRelease archive, verified cloud-signed IPA export and upload completed. '
                      'Apple processing, export compliance, tester assignment and beta review are still checked in App Store Connect. '
                      'This does not prove installation or physical Shortcuts execution.\n')
 

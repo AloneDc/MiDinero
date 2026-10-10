@@ -1,4 +1,4 @@
-name: iOS TestFlight (manual, requires real signing)
+name: iOS TestFlight (automatic cloud signing)
 
 on:
   workflow_dispatch:
@@ -20,13 +20,10 @@ concurrency:
   group: ios-testflight-distribution
   cancel-in-progress: false
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
-
 jobs:
   validate:
     name: Explicit opt-in and tests before accessing signing secrets
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     steps:
       - name: Require main, explicit upload and configured repository gate
@@ -60,7 +57,7 @@ jobs:
   distribute:
     name: Sign, export IPA and upload (not Apple processing/review)
     needs: validate
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     environment: testflight
     steps:
@@ -69,14 +66,11 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Import real signing material, archive, export and upload
+      - name: Archive, cloud sign, export and upload with team API key
         env:
           BUILD_NUMBER: ${{ inputs.build_number }}
           APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID }}
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
-          APPLE_DISTRIBUTION_P12_BASE64: ${{ secrets.APPLE_DISTRIBUTION_P12_BASE64 }}
-          APPLE_DISTRIBUTION_P12_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_P12_PASSWORD }}
-          APPSTORE_PROFILE_BASE64: ${{ secrets.APPSTORE_PROFILE_BASE64 }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_PRIVATE_KEY_BASE64: ${{ secrets.ASC_PRIVATE_KEY_BASE64 }}

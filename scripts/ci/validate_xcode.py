@@ -86,8 +86,8 @@ class Validation:
         self.command("sdks", ["xcodebuild", "-showsdks"])
         self.command("revision", ["git", "rev-parse", "HEAD"])
         version = re.search(r"Xcode (\d+)", xcode)
-        if not version or int(version[1]) < 16:
-            raise RuntimeError("This evidence pipeline requires Xcode >= 16 for xcresulttool test summaries.")
+        if not version or int(version[1]) < 26:
+            raise RuntimeError("This evidence pipeline requires Xcode >= 26.")
         self.command("targets-and-schemes", ["xcodebuild", "-list", "-project", "MiDinero.xcodeproj"])
         base = ["xcodebuild", "-project", "MiDinero.xcodeproj", "-scheme", "MiDinero"]
         inventory = self.json_command("simulators", ["xcrun", "simctl", "list", "--json"])

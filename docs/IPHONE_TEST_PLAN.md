@@ -40,7 +40,7 @@ capturas solo con datos de prueba; no publicar movimientos personales en GitHub.
 - [ ] Rotar a horizontal y volver a vertical; comprobar contenido y teclado.
 - [ ] Opcional: texto grande y VoiceOver; monto, categorías y guardar accesibles.
 
-## Registro dentro de la app
+## Prueba A — App
 
 - [ ] En **Inicio**, tocar **Registrar gasto**.
 - [ ] Introducir `10` (S/ 10.00), elegir **Comida**, escribir **Prueba física** y guardar
@@ -55,7 +55,7 @@ capturas solo con datos de prueba; no publicar movimientos personales en GitHub.
 - [ ] Ir a inicio del iPhone, cerrar MiDinero desde el selector de apps y abrirla
   otra vez desde su icono. Deben conservarse fila, nota, importes y reporte.
 
-## Atajos: descubrimiento y ejecución sin navegar por MiDinero
+## Prueba B — Atajos
 
 - [ ] Con el iPhone desbloqueado, abrir **Atajos / Shortcuts**. Buscar en
   **Atajos de apps → MiDinero**, o **+ → Añadir acción → Apps → MiDinero**.
@@ -85,7 +85,21 @@ capturas solo con datos de prueba; no publicar movimientos personales en GitHub.
   corrección. Debe pedir un monto válido y no aumentar el conteo. Registrar error exacto
   si la experiencia de iOS difiere.
 
-## Siri
+## Prueba C — App cerrada
+
+- [ ] Anotar gastos y conteo actuales (incluyendo cualquier alta de Siri).
+- [ ] Deslizar MiDinero fuera del selector de apps. Dejar el iPhone desbloqueado.
+- [ ] Ejecutar el atajo personal desde Atajos o su icono con `2`, **Otros**,
+  descripción **App terminada** (editar la nota del atajo antes de ejecutar).
+- [ ] Esperado: el sistema inicia la ejecución del intent, guarda y confirma sin
+  exigir recorrer pantallas de MiDinero. Si falla, registrar mensaje y estado exactos.
+- [ ] Abrir MiDinero y comprobar un único gasto S/ 2 «App terminada», total anterior
+  + 2, balance −2 y conteo +1. Reporte e historial deben coincidir.
+- [ ] Registrar explícitamente: ¿funcionó después de terminar MiDinero, sin abrir
+  la app primero? Sí / No; mensaje exacto, si el sistema abrió la app y resultado
+  persistido. El resultado queda pendiente hasta la confirmación del usuario.
+
+## Prueba D — Siri
 
 - [ ] Con Siri configurada en español y teléfono desbloqueado, decir
   **«Siri, registrar gasto en MiDinero»**. Esta es una frase declarada por el provider.
@@ -98,17 +112,6 @@ capturas solo con datos de prueba; no publicar movimientos personales en GitHub.
   guardado si solo se quiere comprobar descubrimiento. Si se guarda, anotar el nuevo gasto.
 - [ ] Opcional: repetir bloqueado; se espera requerimiento de autenticación local.
   Desbloquear o cancelar. Comprobar que cancelar no guarda ni duplica.
-
-## App terminada
-
-- [ ] Anotar gastos y conteo actuales (incluyendo cualquier alta de Siri).
-- [ ] Deslizar MiDinero fuera del selector de apps. Dejar el iPhone desbloqueado.
-- [ ] Ejecutar el atajo personal desde Atajos o su icono con `2`, **Otros**,
-  descripción **App terminada** (editar la nota del atajo antes de ejecutar).
-- [ ] Esperado: el sistema inicia la ejecución del intent, guarda y confirma sin
-  exigir recorrer pantallas de MiDinero. Si falla, registrar mensaje y estado exactos.
-- [ ] Abrir MiDinero y comprobar un único gasto S/ 2 «App terminada», total anterior
-  + 2, balance −2 y conteo +1. Reporte e historial deben coincidir.
 
 ## Reinicio
 

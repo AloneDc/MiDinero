@@ -30,7 +30,7 @@ bash scripts/validate_mac.sh
 ```
 
 Necesita Xcode 16+ y Python 3.10+. Instala un runtime iOS compatible si no existe.
-El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-15`,
+El workflow `.github/workflows/ios-ci.yml` usa el mismo pipeline en `macos-26`,
 en una matriz explícita Xcode 16.4 / 26.2:
 
 1. Registra macOS, arquitectura, Xcode, Swift, SDK, revisión y targets/schemes.
@@ -51,7 +51,7 @@ sobrescribe: muévelo antes de repetir. Las seis pruebas Python (cinco del parse
 una del bloqueo de distribución sin credenciales) son complementarias; no se suman
 al conteo de XCTest/XCUITest.
 
-Un job independiente usa Xcode 26.2 para `generic/platform=iOS`: Release build,
+Un job independiente usa el Xcode 26+ predeterminado del runner para `generic/platform=iOS`: Release build,
 archive sin firma, validación estructural (arm64, SDK, Info.plist, icono, privacidad,
 App Intents, frameworks y dSYM) y empaquetado del xcarchive. Reproducir en Mac:
 

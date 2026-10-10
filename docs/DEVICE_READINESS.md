@@ -142,82 +142,19 @@ compartidos definitivos deben modificarse también en `scripts/generate_project.
 y regenerarse; para pruebas personales mantener signing local, sin subir archivos
 privados. El archive sin firma de CI es evidencia compilable, **no un instalador**.
 
-## B. Distribuir por TestFlight
+## B. Distribuir por TestFlight (actualizado)
 
-Requisitos que todavía debe aportar/configurar el titular:
+La estrategia vigente es automatic/cloud-managed signing con una Team API key.
+No configurar p12 ni provisioning profiles manuales. Consultar
+[TESTFLIGHT_MISSION_4.md](TESTFLIGHT_MISSION_4.md) para los valores y pasos actuales.
 
-1. Membresía activa **Apple Developer Program**, Team ID y acuerdos vigentes.
-   Acceso de Account Holder/Admin para preparar recursos; acceso suficiente para
-   subir builds y administrar testers.
-2. Registrar un App ID explícito disponible y crear la app iOS **MiDinero** en App
-   Store Connect con el mismo bundle ID, idioma, nombre y SKU elegido por el titular.
-3. Certificado **Apple Distribution con clave privada**, exportado como `.p12`
-   protegido por contraseña, y perfil **App Store Connect / App Store distribution**
-   para ese mismo App ID, Team y certificado. No Development ni Ad Hoc; no hacen
-   falta UDIDs de testers para TestFlight.
-4. Clave **de equipo** App Store Connect API (`.p8`, Key ID e Issuer ID), con rol
-   Developer o superior que permita subir el build; el titular habilita acceso a
-   API si aún no existe. Esta clave se usa para el upload, no para crear certificados.
-5. Build number nuevo, resolver export compliance, esperar procesamiento y asignar
-   el build a un grupo interno con tu usuario. Aceptar la invitación en TestFlight
-   del iPhone. Testers externos pueden exigir Beta App Review e información adicional.
-
-Desde el 28/04/2026 Apple exige builds con **Xcode 26+ y SDK iOS 26+** para App Store
-Connect, también TestFlight. Esto no obliga a subir el deployment target de iOS 17.
-Se selecciona Xcode 26.2 explícitamente en los jobs de dispositivo/distribución,
-sin caer silenciosamente al Xcode 16.4 predeterminado del runner. Reconsultar los
-[requisitos vigentes](https://developer.apple.com/news/upcoming-requirements/)
-antes de publicar. [Uploads soportados](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/),
-[claves API](https://developer.apple.com/documentation/appstoreconnectapi/creating-api-keys-for-app-store-connect-api),
-[TestFlight](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview).
-
-## Workflow de distribución preparado, aún sin activar
-
-`.github/workflows/ios-testflight.yml` solo admite `workflow_dispatch`: ni push, ni
-PR, ni finalización de CI publican nada. Exige main, la variable de repositorio
-`TESTFLIGHT_ENABLED=true` y la casilla `confirm_upload`. No se configuró esa variable,
-el environment ni credenciales durante esta fase, y no se ejecutó este workflow.
-
-Estrategia: firma manual reproducible con p12 + perfil, sin Fastlane ni servicios
-externos. Primero corre los 26 tests en un job sin secretos. Después, el job con
-environment **testflight** importa las credenciales, compila/archiva Release con
-firma, verifica `codesign`, exporta IPA con `method=app-store-connect` y usa
-`xcrun altool --validate-app/--upload-app` autenticado con la clave API. Los flags
-se contrastaron con `xcodebuild -help` y `altool --help` reales del runner.
-
-Configurar **Settings → Environments → testflight** restringido a main; se recomienda
-required reviewer para proteger la distribución. Las protecciones no se crean por
-escribir `environment:` en YAML. Configurar en ese environment:
-
-| Tipo | Nombre | Contenido |
-| --- | --- | --- |
-| Variable | `APP_BUNDLE_ID` | ID definitivo registrado, inicialmente `com.eduardo.MiDinero` si está disponible |
-| Variable | `APPLE_TEAM_ID` | Team de 10 caracteres |
-| Secret | `APPLE_DISTRIBUTION_P12_BASE64` | Base64 en una línea del p12 real |
-| Secret | `APPLE_DISTRIBUTION_P12_PASSWORD` | Contraseña no vacía del p12 |
-| Secret | `APPSTORE_PROFILE_BASE64` | Base64 en una línea del perfil de distribución real |
-| Secret | `ASC_KEY_ID` | Key ID de la clave API de equipo |
-| Secret | `ASC_ISSUER_ID` | Issuer ID de ese equipo |
-| Secret | `ASC_PRIVATE_KEY_BASE64` | Base64 en una línea del archivo `.p8` real |
-
-Base64 no cifra: estos valores van en **GitHub Actions Secrets**, nunca en commits,
-issues, capturas ni respuestas de chat. `TESTFLIGHT_ENABLED` va a nivel repositorio,
-porque el primer job comprueba esa variable sin entrar al environment.
-
-El script valida presencia, formato de build/IDs, Team/App ID/fecha/tipo del perfil e
-identidad de distribución. Xcode verifica correspondencia entre certificado y perfil.
-Usa keychain temporal, restaura la lista previa y limpia p12, p8, perfil, keychain,
-archive e IPA en `finally` y en un paso `always()`. Solo usa runner efímero hospedado,
-no sube artefactos de distribución ni guarda passwords Apple. Los errores de comandos
-de keychain no imprimen argv privados. Adaptación de la
-[guía de firma de GitHub](https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications).
-
-En **Actions → iOS TestFlight → Run workflow**, seleccionar main, build nuevo
-(por ejemplo `2`, **sin reutilizar uno ya subido**), y confirmar upload. Un éxito
-significa que el comando de subida terminó; **no** que Apple haya procesado,
-aprobado, asignado testers o instalado el build. Revisar esos estados en ASC.
-La ruta de firma/exportación/upload está preparada y revisada estáticamente,
-**todavía no validada con credenciales reales**.
+Los workflows usan `macos-26` y el Xcode seleccionado por el runner, exigiendo
+versi?n 26 o posterior en ejecuci?n. El archive Release se genera sin firma local;
+`xcodebuild -exportArchive`, con `signingStyle=automatic`, `teamID`, la API key y
+`-allowProvisioningUpdates`, solicita firma y perfil de distribuci?n a Apple.
+Se verifica la IPA firmada antes de validarla y subirla con altool.
+La ruta requiere permisos reales y todav?a no ha sido probada contra este equipo
+Apple: no confundir tests verdes con autorizaci?n cloud ni disponibilidad TestFlight.
 
 ## Protección del repositorio
 
